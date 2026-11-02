@@ -85,7 +85,6 @@ html, body { width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; back
     </div>
     
     <div class="keypad-grid">
-      <!-- BOTONES EXACTAMENTE IGUALES, SIN CAMBIOS VISUALES -->
       <div class="btn-cell red active" onclick="openDisplay('temps')"><div class="led-diode"></div><svg class="btn-svg" viewBox="0 0 100 80" preserveAspectRatio="none"><path class="btn-shape" d="M 6,14 L 62,14 C 64,14 66,12 66,9 L 66,5 C 66,2 68,0 72,0 L 90,0 C 94,0 96,2 96,5 L 96,16 C 96,18 98,20 100,22 L 100,74 C 100,78 96,80 90,80 L 10,80 C 4,80 0,76 0,70 L 0,20 C 0,16 3,14 6,14 Z"/></svg><div class="btn-content"><svg class="btn-icon" viewBox="0 0 24 24"><path d="M12 2v10M8 12h8"/></svg><span class="btn-title">MOTOR<br>TEMPS</span></div></div>
       <div class="btn-cell yellow" onclick="openDisplay('pressures')"><div class="led-diode"></div><svg class="btn-svg" viewBox="0 0 100 80" preserveAspectRatio="none"><path class="btn-shape" d="M 6,14 L 62,14 C 64,14 66,12 66,9 L 66,5 C 66,2 68,0 72,0 L 90,0 C 94,0 96,2 96,5 L 96,16 C 96,18 98,20 100,22 L 100,74 C 100,78 96,80 90,80 L 10,80 C 4,80 0,76 0,70 L 0,20 C 0,16 3,14 6,14 Z"/></svg><div class="btn-content"><svg class="btn-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="btn-title">TURBO<br>PRESS</span></div></div>
       <div class="btn-cell blue" onclick="openDisplay('gforces')"><div class="led-diode"></div><svg class="btn-svg" viewBox="0 0 100 80" preserveAspectRatio="none"><path class="btn-shape" d="M 6,14 L 62,14 C 64,14 66,12 66,9 L 66,5 C 66,2 68,0 72,0 L 90,0 C 94,0 96,2 96,5 L 96,16 C 96,18 98,20 100,22 L 100,74 C 100,78 96,80 90,80 L 10,80 C 4,80 0,76 0,70 L 0,20 C 0,16 3,14 6,14 Z"/></svg><div class="btn-content"><svg class="btn-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 10.5V7a2 2 0 0 0-2-2h-3.5M5 13.5V17a2 2 0 0 0 2 2h3.5"/></svg><span class="btn-title">FUERZAS G<br>CHASIS</span></div></div>
@@ -131,7 +130,6 @@ let obdData = {
   ect: "--", iat: "--", map: "--", boost: "--", speed: "--", volt: "--"
 };
 
-// Conexión Web Bluetooth pura para ELM327 BLE (Ej: vLinker, OBDLink o clones HM-10)
 let btDevice, btServer, rxCharacteristic, txCharacteristic;
 let isConnected = false;
 
@@ -147,11 +145,10 @@ async function connectOBD2() {
 
     btServer = await btDevice.gatt.connect();
     
-    // Intento de conexión al servicio estándar Serie BLE (FFE0)
     let service = await btServer.getPrimaryService('0000ffe0-0000-1000-8000-00805f9b34fb').catch(() => null);
     if(service) {
       rxCharacteristic = await service.getCharacteristic('0000ffe1-0000-1000-8000-00805f9b34fb');
-      txCharacteristic = rxCharacteristic; // En clones baratos RX/TX usan el mismo
+      txCharacteristic = rxCharacteristic;
       
       await rxCharacteristic.startNotifications();
       rxCharacteristic.addEventListener('characteristicvaluechanged', handleOBDResponse);
@@ -162,7 +159,6 @@ async function connectOBD2() {
     document.getElementById('bt-status-txt').innerText = "CONECTADO";
     actionFeedback(900);
     
-    // Iniciar bucle REAL de peticiones OBD2
     startOBDPooling();
     
   } catch (error) {
@@ -171,7 +167,6 @@ async function connectOBD2() {
   }
 }
 
-// Lector de respuestas de la centralita (Decodificación Hex)
 let rxBuffer = "";
 function handleOBDResponse(event) {
   let value = new TextDecoder().decode(event.target.value);
@@ -179,24 +174,22 @@ function handleOBDResponse(event) {
   
   if (rxBuffer.includes('>')) {
     let cleanHex = rxBuffer.replace(/[\r\n> ]/g, '');
-    rxBuffer = ""; // reset
+    rxBuffer = "";
     
-    // Decodificar OBD2 (Ejemplo: Responde "4105XX" para Temp Agua)
     if (cleanHex.startsWith("4105")) {
       obdData.ect = parseInt(cleanHex.substring(4, 6), 16) - 40;
     } else if (cleanHex.startsWith("410F")) {
       obdData.iat = parseInt(cleanHex.substring(4, 6), 16) - 40;
     } else if (cleanHex.startsWith("410B")) {
       obdData.map = parseInt(cleanHex.substring(4, 6), 16);
-      obdData.boost = ((obdData.map - 100) / 100).toFixed(2); // Presión relativa
+      obdData.boost = ((obdData.map - 100) / 100).toFixed(2);
     } else if (cleanHex.startsWith("410D")) {
       obdData.speed = parseInt(cleanHex.substring(4, 6), 16);
     }
-    updateScreens(); // Refrescar los números solo cuando llega info real
+    updateScreens();
   }
 }
 
-// Bucle de petición a la centralita (Polling real)
 async function sendOBDCommand(cmd) {
   if (!txCharacteristic) return;
   let encoder = new TextEncoder();
@@ -206,39 +199,56 @@ async function sendOBDCommand(cmd) {
 async function startOBDPooling() {
   if (!isConnected) return;
   
-  // Setup inicial ELM327
   await sendOBDCommand("ATZ"); setTimeout(async () => {
     await sendOBDCommand("ATE0"); setTimeout(async () => {
       await sendOBDCommand("ATL0");
     }, 500);
   }, 500);
 
-  // Pedir datos en bucle real (cada 500ms un parámetro distinto)
   setInterval(async () => {
     if(!isConnected) return;
-    await sendOBDCommand("0105"); // Temp. Refrigerante
-    setTimeout(async () => await sendOBDCommand("010F"), 150); // Temp. Admisión
-    setTimeout(async () => await sendOBDCommand("010B"), 300); // Presión MAP / Turbo
-    setTimeout(async () => await sendOBDCommand("010D"), 450); // Velocidad
+    await sendOBDCommand("0105");
+    setTimeout(async () => await sendOBDCommand("010F"), 150);
+    setTimeout(async () => await sendOBDCommand("010B"), 300);
+    setTimeout(async () => await sendOBDCommand("010D"), 450);
   }, 1000);
 }
 
-// INTERFAZ DE USUARIO 
+// INTERFAZ DE USUARIO CON SISTEMA DE ALARMAS DE TURBO Y TEMPERATURAS
 function updateScreens() {
-  // Lógica que actualiza el HTML cuando tenemos un dato REAL. Si es "--", se queda igual.
   const elEct = document.getElementById('ect-v'); if (elEct) elEct.innerText = obdData.ect;
   const elIat = document.getElementById('iat-v'); if (elIat) elIat.innerText = obdData.iat;
   const elBst = document.getElementById('boost-v'); if (elBst) elBst.innerText = obdData.boost > 0 ? obdData.boost : "0.00";
   const elMap = document.getElementById('map-v'); if (elMap) elMap.innerText = obdData.map;
   
-  // Alertas Globales de Seguridad
-  if (obdData.ect !== "--" && obdData.ect > 105) {
-    document.getElementById('global-alarm').style.display = 'flex';
-    document.getElementById('alarm-desc').innerText = `¡REFRIGERANTE CRÍTICO (${obdData.ect}°C)!`;
+  let alarmActive = false;
+  let reason = "";
+
+  // 1. ALERTA CRÍTICA DE TURBO (Overboost > 1.45 BAR)
+  if (obdData.boost !== "--" && parseFloat(obdData.boost) > 1.45) {
+    alarmActive = true;
+    reason = `¡SOBREPRESIÓN DE TURBO CRÍTICA (${obdData.boost} BAR)! POSIBLE OVERBOOST.`;
+  }
+  // 2. ALERTA CRÍTICA DE REFRIGERANTE (ECT > 105 °C)
+  else if (obdData.ect !== "--" && obdData.ect > 105) {
+    alarmActive = true;
+    reason = `¡REFRIGERANTE CRÍTICO (${obdData.ect}°C)! RIESGO DE SOBRECALENTAMIENTO.`;
+  }
+  // 3. ALERTA CRÍTICA DE ADMISIÓN / INTERCOOLER (IAT > 58 °C)
+  else if (obdData.iat !== "--" && obdData.iat > 58) {
+    alarmActive = true;
+    reason = `¡INTERCOOLER SATURADO (${obdData.iat}°C IAT)! PÉRDIDA DE RENDIMIENTO.`;
+  }
+
+  const glob = document.getElementById('global-alarm');
+  if (alarmActive) {
+    document.getElementById('alarm-desc').innerText = reason;
+    glob.style.display = 'flex';
+    playBeep(900, 0.15);
   }
 }
 
-// FUERZAS G (ESTO SÍ ES REAL DESDE EL TELÉFONO, NO SIMULADO)
+// FUERZAS G (SENSORES REALES DEL IPHONE)
 let currentGLat = 0, currentGLong = 0, maxG = 0;
 if (window.DeviceMotionEvent) {
   window.addEventListener('devicemotion', (e) => {
@@ -267,7 +277,6 @@ function toggleRecording() {
     logData = [['Timestamp', 'Speed_kmh', 'Boost_bar', 'IAT_C', 'ECT_C']];
     btn.classList.add('active'); lbl.innerHTML = 'GRABANDO...';
     
-    // Graba el log real cada segundo mientras corra
     window.recInterval = setInterval(() => {
       logData.push([new Date().toISOString(), obdData.speed, obdData.boost, obdData.iat, obdData.ect]);
     }, 1000);
