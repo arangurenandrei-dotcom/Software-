@@ -3,1519 +3,363 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="theme-color" content="#191c20">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="R7 SYSTEM">
-<title>R7 SYSTEM | Renault Clio V</title>
-
+<meta name="theme-color" content="#171a1e">
+<title>R7 SYSTEM</title>
 <style>
 :root {
- --bg:#191c20;
- --panel:#242a30;
- --panel2:#2c343b;
- --border:#414b54;
- --white:#f1f3f5;
- --muted:#89939d;
- --green:#4bd48b;
- --yellow:#e9c84e;
- --red:#ed625c;
- --blue:#39b9e9;
- --orange:#ed9849;
+  --bg:#171a1e;
+  --panel:#20252a;
+  --panel2:#292f35;
+  --line:#424b53;
+  --white:#f0f2f4;
+  --muted:#89939d;
+  --green:#4bd590;
+  --yellow:#e9ca4d;
+  --red:#ed625c;
+  --blue:#38bce8;
 }
-* {box-sizing:border-box}
-html,body {
- margin:0;width:100%;height:100%;
- background:var(--bg);color:var(--white);
- font-family:-apple-system,BlinkMacSystemFont,"Arial",sans-serif;
- font-variant-numeric:tabular-nums;
-}
-body {overflow:hidden}
-button,input,select {font:inherit}
-button {color:inherit;cursor:pointer}
-#app {
- height:100dvh;
- height:100svh;
- display:flex;
- flex-direction:column;
- padding-top:env(safe-area-inset-top);
- padding-bottom:env(safe-area-inset-bottom);
-}
-header {
- min-height:58px;
- display:flex;align-items:center;
- justify-content:space-between;
- padding:7px 18px;
- border-bottom:1px solid var(--border);
- flex-shrink:0;
-}
-.brand {
- font-size:22px;font-weight:950;
- letter-spacing:2px;
-}
-.brand small {
- display:block;font-size:9px;
- color:var(--muted);letter-spacing:3px;
- margin-top:3px;
-}
-.header-right {
- font-size:10px;letter-spacing:1px;
- color:var(--green);
- border:1px solid var(--green);
- border-radius:5px;padding:8px 12px;
-}
-main {flex:1;min-height:0;overflow:hidden}
-#home {
- height:100%;
- display:flex;flex-direction:column;
- padding:9px 16px;
-}
-.home-heading {
- color:var(--muted);
- font-weight:900;font-size:15px;
- letter-spacing:2px;
- margin:0 0 8px;
-}
-.button-grid {
- flex:1;min-height:0;
- display:grid;
- grid-template-columns:repeat(3,minmax(0,1fr));
- grid-template-rows:repeat(3,minmax(0,1fr));
- gap:8px 12px;
-}
-.module-button {
- background:var(--panel);
- border:1.5px solid var(--tile);
- border-radius:8px;
- display:flex;flex-direction:row;
- justify-content:flex-start;align-items:center;
- gap:13px;
- min-width:0;min-height:0;
- padding:7px 15px;
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--white);font-family:Arial,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+#app{height:100dvh;width:100vw;display:flex;flex-direction:column}
+header{height:49px;flex-shrink:0;border-bottom:1px solid #353c43;display:flex;align-items:center;justify-content:space-between;padding:0 17px}
+.logo{font-size:19px;font-weight:950;letter-spacing:3px}
+.logo small{font-size:8px;display:block;color:var(--muted);letter-spacing:3px;margin-top:2px}
+.status{font-size:9px;letter-spacing:2px;color:var(--green);border:1px solid var(--green);padding:7px 12px;border-radius:3px}
+main{flex:1;min-height:0;position:relative}
+#home{height:100%;display:flex;flex-direction:column;padding:9px 15px 7px}
+.heading{font-size:11px;font-weight:bold;color:var(--muted);letter-spacing:3px;margin-bottom:8px}
+#keypad{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8px 12px}
+.key{
+ --c:var(--green);
  position:relative;
+ border:1.5px solid var(--c);
+ background:linear-gradient(145deg,#252b30,#1d2227);
+ border-radius:5px;
+ display:flex;align-items:center;
+ padding:7px 17px;
+ gap:15px;
  text-align:left;
+ min-width:0;
+ box-shadow:inset 0 0 0 2px #15191d,0 2px 5px #0005;
 }
-.module-button:active {background:#343d45}
-.module-icon {
- font-size:28px;
- min-width:35px;
- line-height:1;
- text-align:center;
- color:var(--tile);
-}
-.module-name {
- font-size:11px;font-weight:900;
- letter-spacing:1px;
-}
-.module-button::after {
+.key:active{background:#333b42;transform:scale(.99)}
+.key:before{
  content:"";
  position:absolute;
- width:8px;height:8px;
- background:var(--bg);
- border:1px solid var(--tile);
+ right:-5px;top:13px;
+ height:9px;width:9px;
  border-radius:50%;
- right:-4px;top:13px;
+ background:var(--bg);
+ border:1.5px solid var(--c);
 }
-.home-bottom {
- text-align:center;color:#67727c;
- font-size:8px;letter-spacing:2px;
- padding:6px 0 2px;
+.key:after{
+ content:"";
+ position:absolute;left:0;top:9px;bottom:9px;width:3px;
+ background:var(--c);
+ opacity:.8;
 }
+.symbol{
+ width:41px;height:41px;flex-shrink:0;
+ display:grid;place-items:center;
+ color:var(--c);
+ border:1px solid var(--c);
+ border-radius:4px;
+ font-size:23px;font-weight:bold;
+}
+.keytext{min-width:0}
+.keytext strong{display:block;font-size:12px;letter-spacing:2px}
+.keytext small{display:block;font-size:8px;color:var(--muted);margin-top:5px;letter-spacing:1px}
+.keycode{position:absolute;right:13px;bottom:8px;color:#64707a;font-size:8px;letter-spacing:1px}
+#home footer{text-align:center;color:#68727b;font-size:8px;letter-spacing:3px;padding-top:7px}
 
-/* MODULES */
+/* MODULE DISPLAY */
 
-#module {
- height:100%;display:none;
- flex-direction:column;
+#screen{height:100%;display:none;flex-direction:column}
+.modulebar{height:43px;flex-shrink:0;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 13px;gap:12px}
+.back{background:#252b30;border:1px solid var(--line);height:30px;width:38px;border-radius:3px;font-size:18px}
+.modulebar strong{font-size:12px;letter-spacing:2px}
+.modulebar small{color:var(--muted);font-size:8px;margin-left:auto;letter-spacing:2px}
+#content{flex:1;min-height:0;padding:10px 13px;display:flex;flex-direction:column;gap:9px}
+.sectionlabel{font-size:9px;font-weight:bold;letter-spacing:2px;color:var(--muted)}
+.metrics{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:8px}
+.metric{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 12px;position:relative;min-width:0;display:flex;flex-direction:column;justify-content:center}
+.metric:before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:var(--accent,var(--green))}
+.metric label{font-size:9px;color:var(--muted);font-weight:bold;letter-spacing:1.5px}
+.metric strong{font-size:clamp(22px,4vw,43px);font-weight:950;margin-top:5px;white-space:nowrap}
+.metric small{font-size:9px;color:var(--muted);margin-top:4px}
+.metric.big{grid-column:span 2}
+.metric.big strong{font-size:clamp(38px,7vw,75px)}
+.bottomline{height:31px;flex-shrink:0;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:8px;color:var(--muted);letter-spacing:1px}
+.good{color:var(--green)}.warn{color:var(--yellow)}.bad{color:var(--red)}.blue{color:var(--blue)}
+.controls{display:flex;gap:8px}
+.ctrl{background:var(--panel2);border:1px solid var(--line);padding:10px 18px;border-radius:3px;font-size:9px;letter-spacing:1px;font-weight:bold}
+.ctrl.green{border-color:var(--green);color:var(--green)}
+.ctrl.red{border-color:var(--red);color:var(--red)}
+.chart{height:85px;background:var(--panel);border:1px solid var(--line);border-radius:4px;width:100%}
+@media (orientation:portrait){
+ #home{padding:8px}
+ #keypad{grid-template-columns:repeat(3,1fr);gap:6px}
+ .key{padding:4px;justify-content:center;flex-direction:column;gap:5px}
+ .symbol{width:32px;height:32px;font-size:18px}
+ .keytext{text-align:center}
+ .keytext strong{font-size:8px}
+ .keytext small{display:none}
+ .keycode{display:none}
 }
-.module-header {
- flex-shrink:0;
- display:flex;align-items:center;
- gap:12px;padding:7px 15px;
- border-bottom:1px solid var(--border);
-}
-.back {
- border:1px solid var(--border);
- background:var(--panel);
- border-radius:6px;
- width:39px;height:39px;
- font-size:21px;
-}
-.module-title {
- font-weight:900;font-size:15px;
- letter-spacing:2px;
-}
-.module-subtitle {
- font-size:8px;color:var(--muted);
- margin-top:3px;letter-spacing:1px;
-}
-.module-content {
- flex:1;min-height:0;
- overflow-y:auto;
- -webkit-overflow-scrolling:touch;
- padding:12px 15px 25px;
-}
-.section {
- font-size:10px;color:var(--muted);
- font-weight:900;letter-spacing:2px;
- margin:12px 0 8px;
-}
-.grid {
- display:grid;
- grid-template-columns:repeat(4,minmax(0,1fr));
- gap:8px;
-}
-.tile {
- background:var(--panel);
- border:1px solid var(--border);
- border-radius:7px;
- padding:12px;
- min-width:0;
-}
-.tile.green {border-color:var(--green)}
-.tile.yellow {border-color:var(--yellow)}
-.tile.red {border-color:var(--red)}
-.tile.blue {border-color:var(--blue)}
-.tile-label {
- font-size:9px;color:var(--muted);
- font-weight:800;letter-spacing:1px;
- margin-bottom:8px;
-}
-.tile-value {
- font-size:clamp(22px,4vw,34px);
- font-weight:900;line-height:1.1;
- overflow-wrap:anywhere;
-}
-.unit {font-size:9px;color:var(--muted);margin-top:5px}
-.hero {
- background:var(--panel);
- border:1px solid var(--green);
- border-radius:9px;
- padding:13px;
- margin-bottom:9px;
-}
-.hero-layout {
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:15px;align-items:center;
-}
-.hero-speed {
- font-size:clamp(55px,12vw,82px);
- font-weight:950;line-height:1;
- letter-spacing:-4px;
-}
-.hero-speed small {
- font-size:14px;color:var(--muted);
- letter-spacing:0;
-}
-.rpmbar {display:flex;gap:3px;margin-top:10px}
-.rpmbar span {
- height:7px;flex:1;
- background:#3c454e;border-radius:2px;
-}
-.rpmbar span.on:nth-child(-n+6) {background:var(--green)}
-.rpmbar span.on:nth-child(n+7):nth-child(-n+9) {background:var(--yellow)}
-.rpmbar span.on:nth-child(n+10) {background:var(--red)}
-.info {
- background:var(--panel);
- border:1px solid var(--border);
- border-radius:7px;
- padding:11px;
- font-size:10px;line-height:1.6;
- color:var(--muted);margin:9px 0;
-}
-.info strong {color:var(--white)}
-.actions {
- display:flex;flex-wrap:wrap;
- gap:8px;margin:11px 0;
-}
-.action {
- flex:1;min-width:110px;
- background:var(--panel2);
- border:1px solid var(--border);
- border-radius:6px;
- padding:12px 9px;
- font-size:10px;font-weight:900;
- letter-spacing:1px;
-}
-.action.green {border-color:var(--green);color:var(--green)}
-.action.yellow {border-color:var(--yellow);color:var(--yellow)}
-.action.red {border-color:var(--red);color:var(--red)}
-.action.blue {border-color:var(--blue);color:var(--blue)}
-.full {width:100%;margin:5px 0}
-.bigtime {
- text-align:center;
- font-size:clamp(35px,8vw,52px);
- font-weight:900;padding:12px 0;
-}
-.data-row {
- display:flex;justify-content:space-between;
- gap:10px;padding:10px 2px;
- border-bottom:1px solid var(--border);
- font-size:11px;
-}
-.data-row span {color:var(--muted)}
-input,select {
- background:var(--panel);color:var(--white);
- border:1px solid var(--border);
- border-radius:6px;padding:11px;
- width:100%;margin:5px 0 9px;
-}
-canvas {
- display:block;width:100%;
- height:175px;
- background:#20262c;
- border:1px solid var(--border);
- border-radius:8px;
-}
-.session {
- background:var(--panel);
- border:1px solid var(--border);
- border-radius:8px;padding:11px;
- margin:8px 0;
-}
-.session strong {font-size:12px}
-.session small {
- display:block;color:var(--muted);
- margin:5px 0 8px;
-}
-.session-buttons {display:flex;gap:6px;flex-wrap:wrap}
-.session-buttons button {min-width:75px}
-.green-text {color:var(--green)}
-.yellow-text {color:var(--yellow)}
-.red-text {color:var(--red)}
-.blue-text {color:var(--blue)}
-.status-line {
- display:flex;justify-content:space-between;
- align-items:center;gap:10px;
-}
-.hidden {display:none!important}
-footer {
- text-align:center;color:#59636d;
- font-size:9px;padding:12px;
-}
-@media (orientation:portrait) {
- .module-button {padding:4px;justify-content:center;flex-direction:column;gap:7px}
- .module-name {text-align:center;font-size:9px}
- .module-icon {font-size:27px}
- .grid {grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-height:430px) and (orientation:landscape) {
- header {min-height:49px;padding:4px 13px}
- .brand {font-size:18px}
- #home {padding:5px 12px}
- .home-heading {font-size:12px;margin-bottom:5px}
- .button-grid {gap:5px 9px}
- .module-button {padding:4px 10px;gap:8px}
- .module-icon {font-size:23px;min-width:29px}
- .module-name {font-size:9px}
- .home-bottom {padding:3px}
- .module-header {padding:4px 12px}
- .back {height:34px;width:34px}
- .module-content {padding:7px 12px}
- .section {margin:8px 0 6px}
- .tile {padding:9px}
- .hero {padding:9px}
- canvas {height:145px}
+@media(max-height:430px) and (orientation:landscape){
+ header{height:39px}
+ #home{padding:6px 12px}
+ .heading{margin-bottom:5px}
+ #keypad{gap:5px 9px}
+ .key{padding:4px 12px;gap:10px}
+ .symbol{width:32px;height:32px;font-size:18px}
+ .keytext strong{font-size:10px}
+ .keytext small{font-size:7px;margin-top:3px}
+ .modulebar{height:35px}
+ #content{padding:7px 10px;gap:5px}
+ .metric{padding:6px 9px}
+ .bottomline{height:23px}
 }
 </style>
 </head>
-
 <body>
 <div id="app">
-
 <header>
- <div class="brand">
-  R7 SYSTEM
-  <small>RENAULT CLIO V · PERFORMANCE</small>
- </div>
- <div class="header-right" id="systemStatus">SIMULATION</div>
+ <div class="logo">R7 SYSTEM<small>RENAULT CLIO V · PERFORMANCE</small></div>
+ <div class="status" id="status">SIMULATION</div>
 </header>
 
 <main>
-
-<!-- HOME: ONLY BUTTON PANEL -->
-
+<!-- BOTONERA INICIAL -->
 <section id="home">
- <div class="home-heading">01 / SYSTEM CONTROL</div>
+ <div class="heading">01 / SYSTEM CONTROL</div>
+ <div id="keypad">
 
- <div class="button-grid">
-
-  <button class="module-button" style="--tile:var(--green)" onclick="openModule('main')">
-   <span class="module-icon">▦</span><span class="module-name">MAIN</span>
+  <button class="key" style="--c:var(--green)" onclick="openPage('main')">
+   <span class="symbol">▦</span>
+   <span class="keytext"><strong>MAIN</strong><small>VEHICLE STATUS</small></span><span class="keycode">01</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--yellow)" onclick="openModule('engine')">
-   <span class="module-icon">♨</span><span class="module-name">ENGINE</span>
+  <button class="key" style="--c:var(--yellow)" onclick="openPage('engine')">
+   <span class="symbol">♨</span>
+   <span class="keytext"><strong>ENGINE</strong><small>ENGINE CONTROL</small></span><span class="keycode">02</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--yellow)" onclick="openModule('pressure')">
-   <span class="module-icon">◉</span><span class="module-name">PRESSURE</span>
+  <button class="key" style="--c:var(--yellow)" onclick="openPage('pressure')">
+   <span class="symbol">◉</span>
+   <span class="keytext"><strong>PRESSURE</strong><small>PRESSURE MONITOR</small></span><span class="keycode">03</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--blue)" onclick="openModule('gforce')">
-   <span class="module-icon">⌖</span><span class="module-name">G-FORCE</span>
+  <button class="key" style="--c:var(--blue)" onclick="openPage('gforce')">
+   <span class="symbol">⌖</span>
+   <span class="keytext"><strong>G-FORCE</strong><small>ACCELERATION</small></span><span class="keycode">04</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--red)" onclick="openModule('record')">
-   <span class="module-icon">●</span><span class="module-name">RECORD</span>
+  <button class="key" style="--c:var(--red)" onclick="openPage('record')">
+   <span class="symbol">●</span>
+   <span class="keytext"><strong>RECORD</strong><small>STAGE RECORDING</small></span><span class="keycode">05</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--blue)" onclick="openModule('analysis')">
-   <span class="module-icon">▥</span><span class="module-name">ANALYSIS</span>
+  <button class="key" style="--c:var(--blue)" onclick="openPage('analysis')">
+   <span class="symbol">▥</span>
+   <span class="keytext"><strong>ANALYSIS</strong><small>DATA REVIEW</small></span><span class="keycode">06</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--red)" onclick="openModule('diagnostics')">
-   <span class="module-icon">⚙</span><span class="module-name">DIAGNOSTICS</span>
+  <button class="key" style="--c:var(--red)" onclick="openPage('diagnostics')">
+   <span class="symbol">⚙</span>
+   <span class="keytext"><strong>DIAGNOSTICS</strong><small>ECU / FAULTS</small></span><span class="keycode">07</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--blue)" onclick="openModule('gps')">
-   <span class="module-icon">⌖</span><span class="module-name">GPS</span>
+  <button class="key" style="--c:var(--blue)" onclick="openPage('gps')">
+   <span class="symbol">⌖</span>
+   <span class="keytext"><strong>GPS</strong><small>POSITION / STAGE</small></span><span class="keycode">08</span>
   </button>
 
-  <button class="module-button" style="--tile:var(--green)" onclick="openModule('settings')">
-   <span class="module-icon">☷</span><span class="module-name">SETTINGS</span>
+  <button class="key" style="--c:var(--green)" onclick="openPage('settings')">
+   <span class="symbol">☷</span>
+   <span class="keytext"><strong>SETTINGS</strong><small>SYSTEM CONFIG</small></span><span class="keycode">09</span>
   </button>
 
  </div>
- <div class="home-bottom">R7 PERFORMANCE SYSTEM · V1.2</div>
+ <footer>R7 PERFORMANCE · CONTROL INTERFACE</footer>
 </section>
 
-<!-- MODULE VIEW -->
-
-<section id="module">
- <div class="module-header">
+<!-- PANTALLAS INDIVIDUALES -->
+<section id="screen">
+ <div class="modulebar">
   <button class="back" onclick="goHome()">←</button>
-  <div>
-   <div class="module-title" id="moduleTitle">MAIN</div>
-   <div class="module-subtitle">R7 SYSTEM / VEHICLE MONITORING</div>
-  </div>
+  <strong id="title">MAIN</strong>
+  <small>R7 / CLIO V</small>
  </div>
- <div class="module-content" id="moduleContent"></div>
+ <div id="content"></div>
+ <div class="bottomline">
+  <span>R7 PERFORMANCE SYSTEM</span>
+  <span id="source">SIMULATION DATA</span>
+ </div>
 </section>
-
 </main>
 </div>
 
 <script>
-"use strict";
-
-/* ==========================================
-   R7 SYSTEM CORE
-========================================== */
-
-const $ = id => document.getElementById(id);
-
-const CONFIG = {
- database:"R7_SYSTEM_DB",
- version:1,
- sampleRate:250,
- simulation:true
+const names={
+ main:"MAIN / VEHICLE STATUS",
+ engine:"ENGINE / TEMPERATURE",
+ pressure:"PRESSURE / MONITOR",
+ gforce:"G-FORCE / ACCELERATION",
+ record:"RECORD / STAGE",
+ analysis:"ANALYSIS / TELEMETRY",
+ diagnostics:"DIAGNOSTICS / ECU",
+ gps:"GPS / POSITION",
+ settings:"SETTINGS / SYSTEM"
 };
 
-let simulation=CONFIG.simulation;
-let simTime=0;
-let current={};
-let currentModule="main";
+const templates={
+ main:[
+  ["SPEED","113","KM/H","big","--green"],
+  ["ENGINE RPM","5152","RPM","","--yellow"],
+  ["GEAR","4","MANUAL","","--blue"],
+  ["THROTTLE","78","%","","--green"],
+  ["ENGINE LOAD","72","%","","--yellow"],
+  ["VOLTAGE","14.2","V","","--green"],
+  ["COOLANT","91","°C","","--green"]
+ ],
+ engine:[
+  ["COOLANT TEMP.","91","°C","","--green"],
+  ["INTAKE AIR","32","°C","","--green"],
+  ["OIL TEMP.","---","°C","", "--yellow"],
+  ["OIL PRESSURE","---","BAR","","--red"],
+  ["ENGINE RPM","5152","RPM","","--yellow"],
+  ["ENGINE LOAD","72","%","","--green"],
+  ["VOLTAGE","14.2","V","","--blue"],
+  ["IGNITION","ACTIVE","","","--green"]
+ ],
+ pressure:[
+  ["TURBO BOOST","1.12","BAR REL.","","--yellow"],
+  ["MAP","2.13","BAR ABS.","","--blue"],
+  ["ATMOSPHERIC","1.01","BAR","","--green"],
+  ["FUEL PRESSURE","---","BAR","","--yellow"],
+  ["OIL PRESSURE","---","BAR","","--red"],
+  ["TYRE PRESSURE","---","BAR","","--blue"],
+  ["BRAKE PRESSURE","---","BAR","","--yellow"],
+  ["INTAKE VACUUM","---","BAR","","--green"]
+ ],
+ gforce:[
+  ["LONGITUDINAL","0.72","G","","--blue"],
+  ["LATERAL","-0.48","G","","--green"],
+  ["MAXIMUM","1.24","G","","--yellow"],
+  ["GPS SPEED","113","KM/H","","--blue"],
+  ["ACCELERATION","ACTIVE","","","--green"],
+  ["SENSOR","PHONE","","","--yellow"],
+  ["CALIBRATION","PENDING","","","--red"],
+  ["RECORDING","READY","","","--green"]
+ ],
+ record:[
+  ["STAGE TIME","00:00","MIN","big","--red"],
+  ["SAMPLES","0","POINTS","","--green"],
+  ["DISTANCE","0.00","KM","","--blue"],
+  ["MAX SPEED","---","KM/H","","--yellow"],
+  ["MAX RPM","---","RPM","","--yellow"],
+  ["STATUS","READY","","","--green"],
+  ["GPS","OFF","","","--blue"]
+ ],
+ analysis:[
+  ["SESSIONS","0","SAVED","","--green"],
+  ["DISTANCE","---","KM","","--blue"],
+  ["MAX SPEED","---","KM/H","","--yellow"],
+  ["MAX RPM","---","RPM","","--yellow"],
+  ["COMPARISON","READY","","","--green"],
+  ["CSV","EXPORT","","","--blue"],
+  ["TELEMETRY","READY","","","--green"]
+ ],
+ diagnostics:[
+  ["CONNECTION","OFFLINE","","","--red"],
+  ["PROTOCOL","UNKNOWN","","","--yellow"],
+  ["DTC CODES","---","CODES","","--red"],
+  ["ECU","WAITING","","","--blue"],
+  ["ADAPTER","UNKNOWN","","","--yellow"],
+  ["LIVE DATA","PENDING","","","--green"]
+ ],
+ gps:[
+  ["GPS SPEED","113","KM/H","big","--blue"],
+  ["LATITUDE","---","DEGREES","","--green"],
+  ["LONGITUDE","---","DEGREES","","--green"],
+  ["ACCURACY","---","METRES","","--yellow"],
+  ["DISTANCE","0.00","KM","","--blue"],
+  ["SATELLITES","---","GPS","","--green"],
+  ["POSITION","PENDING","","","--yellow"]
+ ],
+ settings:[
+  ["SYSTEM","R7 V1","","","--green"],
+  ["VEHICLE","CLIO V","","","--blue"],
+  ["DATABASE","LOCAL","","","--green"],
+  ["EXPORT","CSV","","","--blue"],
+  ["OBD2","PENDING","","","--yellow"],
+  ["DISPLAY","LANDSCAPE","","","--green"],
+  ["STORAGE","READY","","","--green"]
+ ]
+};
 
-let db=null;
-let dbReady=false;
-
+let timer=null;
+let seconds=0;
 let recording=false;
-let paused=false;
-let recordStart=0;
-let pauseStart=0;
-let pausedTotal=0;
-let samples=[];
-let recordTimer=null;
 
-let gpsWatch=null;
-let gpsPosition=null;
-let previousGPS=null;
-let distance=0;
+function openPage(id){
+ document.getElementById("home").style.display="none";
+ document.getElementById("screen").style.display="flex";
+ document.getElementById("title").textContent=names[id];
+ document.getElementById("source").textContent="SIMULATION DATA";
 
-let motionEnabled=false;
-let motionBase={x:0,y:0,z:0};
-let motionSamples=[];
-let gx=0,gy=0,gmax=0;
+ const content=document.getElementById("content");
+ const data=templates[id]||[];
 
-let selectedSession=null;
-let sessionsCache=[];
-
-const modules={
- main:"MAIN",
- engine:"ENGINE",
- pressure:"PRESSURE",
- gforce:"G-FORCE",
- record:"RECORD",
- analysis:"ANALYSIS",
- diagnostics:"DIAGNOSTICS",
- gps:"GPS",
- settings:"SETTINGS"
-};
-
-/* ==========================================
-   DATABASE / INDEXEDDB
-========================================== */
-
-function openDB() {
- return new Promise((resolve,reject)=>{
-  if(!window.indexedDB) {
-   reject(Error("IndexedDB unavailable"));
-   return;
-  }
-
-  const request=indexedDB.open(CONFIG.database,CONFIG.version);
-
-  request.onupgradeneeded=e=>{
-   const database=e.target.result;
-   if(!database.objectStoreNames.contains("sessions")) {
-    database.createObjectStore("sessions",{keyPath:"id"});
-   }
-  };
-
-  request.onsuccess=e=>{
-   db=e.target.result;
-   dbReady=true;
-   resolve(db);
-  };
-
-  request.onerror=()=>reject(request.error);
- });
-}
-
-async function saveSession(data) {
- if(!dbReady) await openDB();
-
- return new Promise((resolve,reject)=>{
-  const tx=db.transaction("sessions","readwrite");
-  tx.objectStore("sessions").put(data);
-  tx.oncomplete=resolve;
-  tx.onerror=()=>reject(tx.error);
- });
-}
-
-async function getSessions() {
- if(!dbReady) await openDB();
-
- return new Promise((resolve,reject)=>{
-  const req=db.transaction("sessions","readonly")
-   .objectStore("sessions").getAll();
-
-  req.onsuccess=()=>resolve(req.result||[]);
-  req.onerror=()=>reject(req.error);
- });
-}
-
-async function deleteSession(id) {
- return new Promise((resolve,reject)=>{
-  const tx=db.transaction("sessions","readwrite");
-  tx.objectStore("sessions").delete(id);
-  tx.oncomplete=resolve;
-  tx.onerror=()=>reject(tx.error);
- });
-}
-
-async function refreshSessions() {
- sessionsCache=await getSessions();
- return sessionsCache;
-}
-
-/* ==========================================
-   NAVIGATION
-========================================== */
-
-function openModule(name) {
- currentModule=name;
- $("home").style.display="none";
- $("module").style.display="flex";
- $("moduleTitle").textContent=modules[name];
- renderModule(name);
-}
-
-function goHome() {
- $("module").style.display="none";
- $("home").style.display="flex";
- currentModule="main";
-}
-
-function renderModule(name) {
- const views={
-  main:mainHTML,
-  engine:engineHTML,
-  pressure:pressureHTML,
-  gforce:gforceHTML,
-  record:recordHTML,
-  analysis:analysisHTML,
-  diagnostics:diagnosticsHTML,
-  gps:gpsHTML,
-  settings:settingsHTML
- };
-
- $("moduleContent").innerHTML=views[name]();
- updateVisibleData();
-
- if(name==="analysis") refreshAnalysis();
- if(name==="record") updateRecordUI();
- if(name==="gforce") drawG();
-}
-
-/* ==========================================
-   SIMULATED DATA
-   These values are NOT ECU readings.
-========================================== */
-
-function simulate() {
- simTime+=CONFIG.sampleRate/1000;
-
- const speed=Math.max(0,Math.round(
-  72+65*Math.sin(simTime/7)+20*Math.sin(simTime/2.7)
- ));
-
- const rpm=Math.round(
-  1100+speed*42+700*Math.sin(simTime/3)
- );
-
- const throttle=Math.max(0,Math.min(100,
-  Math.round(35+45*Math.sin(simTime/4))
- ));
-
- const coolant=88+Math.round(3*Math.sin(simTime/19));
- const iat=25+Math.round(5*Math.sin(simTime/10));
-
- const boost=Math.max(-0.3,Math.min(1.3,
-  throttle/100*1.3-0.35
- ));
-
- return {
-  timestamp:Date.now(),
-  speed,rpm,throttle,
-  load:Math.round(throttle*.7+10),
-  gear:speed<5?"N":String(Math.min(6,Math.max(1,Math.floor(rpm/1150)))),
-  coolant,iat,
-  boost:Number(boost.toFixed(2)),
-  atmos:1.01,
-  map:Number((1.01+boost).toFixed(2)),
-  voltage:Number((14.1+0.2*Math.sin(simTime/20)).toFixed(2)),
-  source:"SIM"
- };
-}
-
-/* ==========================================
-   MAIN DATA LOOP
-========================================== */
-
-function tick() {
- if(simulation) {
-  current=simulate();
- }
-
- if(!current.timestamp) return;
-
- updateVisibleData();
-
- if(recording && !paused) {
-  samples.push({
-   ...current,
-   gx:Number(gx.toFixed(3)),
-   gy:Number(gy.toFixed(3)),
-   gpsLat:gpsPosition?.lat??"",
-   gpsLon:gpsPosition?.lon??"",
-   gpsAccuracy:gpsPosition?.accuracy??"",
-   distanceKm:Number(distance.toFixed(5)),
-   elapsed:elapsedTime()
-  });
- }
-}
-
-setInterval(tick,CONFIG.sampleRate);
-
-/* ==========================================
-   RENDER HELPERS
-========================================== */
-
-function tile(label,value,unit,color="") {
- return `<div class="tile ${color}">
-  <div class="tile-label">${label}</div>
-  <div class="tile-value">${value}</div>
-  <div class="unit">${unit}</div>
- </div>`;
-}
-
-function section(text) {
- return `<div class="section">${text}</div>`;
-}
-
-function info(text) {
- return `<div class="info">${text}</div>`;
-}
-
-function dataRow(label,value,id="") {
- return `<div class="data-row">
-  <span>${label}</span>
-  <strong ${id?`id="${id}"`:""}>${value}</strong>
- </div>`;
-}
-
-/* ==========================================
-   UPDATE LIVE VALUES
-========================================== */
-
-function put(id,value) {
- const el=$(id);
- if(el) el.textContent=value;
-}
-
-function updateVisibleData() {
- if(currentModule==="main") {
-  put("vSpeed",current.speed);
-  put("vRPM",current.rpm);
-  put("vGear",current.gear);
-  put("vThrottle",current.throttle);
-  put("vLoad",current.load);
-  put("vVoltage",current.voltage);
-  put("vSource",current.source==="SIM"?"SIMULATION":"OBD2");
-  put("vRecording",recording?(paused?"PAUSED":"RECORDING"):"STANDBY");
-  put("vGPS",gpsPosition?"ACTIVE":"NOT ACTIVE");
-
-  const bar=$("rpmBar");
-  if(bar) {
-   const count=Math.max(0,Math.min(12,Math.round(current.rpm/650)));
-   [...bar.children].forEach((el,i)=>{
-    el.classList.toggle("on",i<count);
-   });
-  }
- }
-
- if(currentModule==="engine") {
-  put("eCoolant",current.coolant);
-  put("eIAT",current.iat);
-  put("eLoad",current.load);
-  put("eThrottle",current.throttle);
-  put("eRPM",current.rpm);
-  put("eVoltage",current.voltage);
-  put("engineHealth",current.source==="SIM"?"SIMULATED DATA":"DATA RECEIVED");
- }
-
- if(currentModule==="pressure") {
-  put("pBoost",current.boost);
-  put("pMAP",current.map);
-  put("pAtmos",current.atmos);
- }
-
- if(currentModule==="gforce") {
-  put("gX",gx.toFixed(2));
-  put("gY",gy.toFixed(2));
-  put("gMax",gmax.toFixed(2));
-  put("gSpeed",gpsPosition?.speed!=null?
-   (gpsPosition.speed*3.6).toFixed(1):"---");
-  drawG();
- }
-
- if(currentModule==="record") updateRecordUI();
-}
-
-/* ==========================================
-   MODULE: MAIN
-========================================== */
-
-function mainHTML() {
- return `
- ${section("VEHICLE STATUS")}
- <div class="hero">
-  <div class="hero-layout">
-   <div>
-    <div class="tile-label">VEHICLE SPEED</div>
-    <div class="hero-speed"><span id="vSpeed">0</span><small> KM/H</small></div>
-   </div>
-   <div>
-    <div class="tile-label">ENGINE RPM</div>
-    <div class="tile-value" style="font-size:clamp(30px,6vw,48px)" id="vRPM">850</div>
-    <div class="rpmbar" id="rpmBar">
-     ${Array(12).fill("<span></span>").join("")}
+ content.innerHTML=`
+  <div class="sectionlabel">LIVE PARAMETERS / ${id.toUpperCase()}</div>
+  <div class="metrics">
+   ${data.map((item,i)=>`
+    <div class="metric ${item[3]||""}" style="--accent:var(${item[4]?.replace("--","--")||"--green"})">
+     <label>${item[0]}</label>
+     <strong id="v${i}">${item[1]}</strong>
+     <small>${item[2]}</small>
     </div>
-   </div>
+   `).join("")}
   </div>
- </div>
- ${section("DRIVING PARAMETERS")}
- <div class="grid">
-  ${tile("GEAR",'<span id="vGear">N</span>',"TRANSMISSION","green")}
-  ${tile("THROTTLE",'<span id="vThrottle">0</span>',"POSITION %","yellow")}
-  ${tile("ENGINE LOAD",'<span id="vLoad">0</span>',"LOAD %","blue")}
-  ${tile("VOLTAGE",'<span id="vVoltage">14.2</span>',"VOLTS","green")}
- </div>
- ${section("SYSTEM STATUS")}
- <div class="grid">
-  ${tile("DATA SOURCE",'<span id="vSource">SIMULATION</span>',"INPUT","blue")}
-  ${tile("RECORDING",'<span id="vRecording">STANDBY</span>',"SESSION","yellow")}
-  ${tile("GPS",'<span id="vGPS">NOT ACTIVE</span>',"LOCATION","green")}
-  ${tile("SYSTEM","ONLINE","R7 CORE","green")}
- </div>
- ${info("Simulation mode is active. Do not use simulated values for vehicle operation or mechanical decisions.")}
+  ${id==="record"?`
+   <div class="controls">
+    <button class="ctrl green" onclick="start()">● START</button>
+    <button class="ctrl red" onclick="stop()">■ STOP</button>
+   </div>`:""}
+  ${id==="analysis"?`
+   <div class="controls">
+    <button class="ctrl green" onclick="alert('El reproductor de telemetría se incorporará en la versión de análisis.')">OPEN REPLAY</button>
+    <button class="ctrl" onclick="alert('No hay sesiones guardadas en este prototipo visual.')">SESSIONS</button>
+   </div>`:""}
  `;
 }
 
-/* ==========================================
-   MODULE: ENGINE
-========================================== */
-
-function engineHTML() {
- return `
- ${section("ENGINE TEMPERATURE")}
- <div class="grid">
-  ${tile("COOLANT TEMP.",'<span id="eCoolant">--</span>',"°C","green")}
-  ${tile("INTAKE AIR",'<span id="eIAT">--</span>',"°C","yellow")}
-  ${tile("OIL TEMPERATURE","---","REQUIRES PID","yellow")}
-  ${tile("EXHAUST TEMP.","---","REQUIRES SENSOR","red")}
- </div>
- ${section("ENGINE PARAMETERS")}
- <div class="grid">
-  ${tile("ENGINE LOAD",'<span id="eLoad">--</span>',"%","blue")}
-  ${tile("THROTTLE",'<span id="eThrottle">--</span>',"%","green")}
-  ${tile("RPM",'<span id="eRPM">--</span>',"REV/MIN","yellow")}
-  ${tile("VOLTAGE",'<span id="eVoltage">--</span>',"V","green")}
- </div>
- ${section("ENGINE HEALTH")}
- <div class="tile">
-  <div class="tile-label">AVAILABLE DATA STATUS</div>
-  <strong id="engineHealth">WAITING FOR DATA</strong>
- </div>
- ${info("Oil temperature, oil pressure, exhaust temperature and other non-standard values require compatible ECU PIDs or additional sensors. No missing value is estimated.")}
- `;
+function goHome(){
+ document.getElementById("screen").style.display="none";
+ document.getElementById("home").style.display="flex";
 }
 
-/* ==========================================
-   MODULE: PRESSURE
-========================================== */
-
-function pressureHTML() {
- return `
- ${section("PRESSURE MONITOR")}
- <div class="grid">
-  ${tile("BOOST PRESSURE",'<span id="pBoost">--</span>',"BAR RELATIVE","blue")}
-  ${tile("MAP",'<span id="pMAP">--</span>',"BAR ABSOLUTE","yellow")}
-  ${tile("ATMOSPHERIC",'<span id="pAtmos">--</span>',"BAR","green")}
-  ${tile("FUEL PRESSURE","---","REQUIRES PID","yellow")}
-  ${tile("OIL PRESSURE","---","REQUIRES SENSOR","red")}
-  ${tile("TYRE PRESSURE","---","REQUIRES TPMS","blue")}
-  ${tile("BRAKE PRESSURE","---","REQUIRES SENSOR","yellow")}
-  ${tile("INTAKE VACUUM","---","REQUIRES PID","green")}
- </div>
- ${info("Boost = absolute MAP minus atmospheric pressure. The displayed simulated values are illustrative only.")}
- `;
-}
-
-/* ==========================================
-   MODULE: G-FORCE
-========================================== */
-
-function gforceHTML() {
- return `
- ${section("ACCELERATION MONITOR")}
- <div class="grid">
-  ${tile("LONGITUDINAL",'<span id="gX">0.00</span>',"G","blue")}
-  ${tile("LATERAL",'<span id="gY">0.00</span>',"G","green")}
-  ${tile("MAXIMUM",'<span id="gMax">0.00</span>',"G","yellow")}
-  ${tile("GPS SPEED",'<span id="gSpeed">---</span>',"KM/H","blue")}
- </div>
- ${section("G-FORCE VECTOR")}
- <canvas id="gCanvas" width="600" height="350"></canvas>
- <div class="actions">
-  <button class="action blue" onclick="enableMotion()">ENABLE SENSOR</button>
-  <button class="action" onclick="calibrateMotion()">CALIBRATE</button>
-  <button class="action yellow" onclick="resetG()">RESET</button>
- </div>
- <div class="info" id="gStatus">The phone accelerometer requires permission and calibration. Its axes are phone-relative, not automatically vehicle-relative. Values are experimental.</div>
- `;
-}
-
-/* ==========================================
-   G FORCE / IPHONE MOTION
-========================================== */
-
-async function enableMotion() {
- try {
-  if(typeof DeviceMotionEvent==="undefined") {
-   throw Error("Motion sensor unavailable");
-  }
-
-  if(typeof DeviceMotionEvent.requestPermission==="function") {
-   const result=await DeviceMotionEvent.requestPermission();
-   if(result!=="granted") throw Error("Permission denied");
-  }
-
-  window.addEventListener("devicemotion",onMotion);
-  motionEnabled=true;
-  put("gStatus","SENSOR ACTIVE · CALIBRATE WITH PHONE STATIONARY");
- } catch(e) {
-  put("gStatus","SENSOR ERROR: "+e.message);
- }
-}
-
-function onMotion(event) {
- const a=event.acceleration;
-
- if(!a || a.x==null || a.y==null) {
-  put("gStatus","ACCELERATION DATA UNAVAILABLE");
-  return;
- }
-
- if(motionSamples.length<30) {
-  motionSamples.push({
-   x:a.x||0,y:a.y||0,z:a.z||0
-  });
-  return;
- }
-
- gx=((a.x||0)-motionBase.x)/9.80665;
- gy=((a.y||0)-motionBase.y)/9.80665;
-
- gmax=Math.max(gmax,Math.hypot(gx,gy));
-}
-
-function calibrateMotion() {
- if(!motionEnabled) {
-  put("gStatus","ENABLE SENSOR FIRST");
-  return;
- }
-
- if(motionSamples.length<30) {
-  put("gStatus","WAITING FOR CALIBRATION SAMPLES");
-  return;
- }
-
- motionBase={
-  x:motionSamples.reduce((s,v)=>s+v.x,0)/motionSamples.length,
-  y:motionSamples.reduce((s,v)=>s+v.y,0)/motionSamples.length,
-  z:motionSamples.reduce((s,v)=>s+v.z,0)/motionSamples.length
- };
-
- motionSamples=[];
- gx=0;gy=0;
- put("gStatus","CALIBRATED · PHONE AXES · EXPERIMENTAL");
-}
-
-function resetG() {
- gx=0;gy=0;gmax=0;
- drawG();
-}
-
-function drawG() {
- const canvas=$("gCanvas");
- if(!canvas) return;
-
- const ctx=canvas.getContext("2d");
- const w=canvas.width,h=canvas.height;
-
- ctx.clearRect(0,0,w,h);
- ctx.strokeStyle="#48525b";
- ctx.lineWidth=2;
-
- ctx.beginPath();
- ctx.moveTo(w/2,15);ctx.lineTo(w/2,h-15);
- ctx.moveTo(15,h/2);ctx.lineTo(w-15,h/2);
- ctx.stroke();
-
- for(let r=45;r<=135;r+=45) {
-  ctx.beginPath();
-  ctx.arc(w/2,h/2,r,0,Math.PI*2);
-  ctx.stroke();
- }
-
- ctx.fillStyle="#89939d";
- ctx.font="16px Arial";
- ctx.fillText("LATERAL",w-95,h/2-10);
- ctx.fillText("LONG.",w/2+10,22);
-
- ctx.fillStyle="#4bd48b";
- ctx.beginPath();
- ctx.arc(w/2+gx*90,h/2-gy*90,10,0,Math.PI*2);
- ctx.fill();
-}
-
-/* ==========================================
-   MODULE: RECORD
-========================================== */
-
-function recordHTML() {
- return `
- ${section("STAGE RECORDING")}
- <div class="tile">
-  <div class="tile-label">SESSION CHRONOMETER</div>
-  <div class="bigtime" id="timer">00:00.000</div>
-  <div class="tile-label" style="text-align:center" id="recordState">SYSTEM READY</div>
- </div>
- <div class="grid">
-  ${tile("SAMPLES",'<span id="sampleCount">0</span>',"RECORDED")}
-  ${tile("DISTANCE",'<span id="recordDistance">0.00</span>',"KM")}
-  ${tile("MAX SPEED",'<span id="maxSpeed">0</span>',"KM/H")}
-  ${tile("MAX RPM",'<span id="maxRPM">0</span>',"RPM")}
- </div>
- ${section("SESSION CONFIGURATION")}
- <label class="tile-label" for="sessionName">STAGE NAME</label>
- <input id="sessionName" value="R7 STAGE" maxlength="60">
- <div class="actions">
-  <button class="action green" id="startBtn" onclick="startRecording()">● START</button>
-  <button class="action yellow" id="pauseBtn" onclick="togglePause()" disabled>Ⅱ PAUSE</button>
-  <button class="action red" onclick="stopRecording()">■ STOP & SAVE</button>
- </div>
- ${section("RECORDING STATUS")}
- <div id="recordDetails" class="info">Ready to record. Start a session before driving.</div>
- ${info("Keep the phone securely mounted. Do not operate the application while driving. Start and stop recordings when stationary.")}
- `;
-}
-
-function elapsedTime() {
- if(!recording) return 0;
- const end=paused?pauseStart:Date.now();
- return Math.max(0,end-recordStart-pausedTotal);
-}
-
-function formatTime(ms) {
- const t=Math.max(0,ms);
- const minutes=Math.floor(t/60000);
- const seconds=Math.floor(t%60000/1000);
- const millis=Math.floor(t%1000);
- return String(minutes).padStart(2,"0")+":"+
-  String(seconds).padStart(2,"0")+"."+
-  String(millis).padStart(3,"0");
-}
-
-function startRecording() {
- if(recording) return;
-
- samples=[];
- distance=0;
- previousGPS=null;
- recordStart=Date.now();
- pausedTotal=0;
- paused=false;
+function start(){
  recording=true;
-
- const input=$("sessionName");
- sessionName=(input?.value||"R7 STAGE").trim()||"R7 STAGE";
-
- updateRecordUI();
+ seconds=0;
+ clearInterval(timer);
+ timer=setInterval(()=>{
+  if(!recording)return;
+  seconds++;
+  const el=document.getElementById("v0");
+  if(el)el.textContent=
+   String(Math.floor(seconds/60)).padStart(2,"0")+":"+
+   String(seconds%60).padStart(2,"0");
+ },1000);
 }
 
-function togglePause() {
- if(!recording) return;
-
- if(!paused) {
-  paused=true;
-  pauseStart=Date.now();
- } else {
-  pausedTotal+=Date.now()-pauseStart;
-  paused=false;
- }
- updateRecordUI();
-}
-
-async function stopRecording() {
- if(!recording) return;
-
- if(paused) pausedTotal+=Date.now()-pauseStart;
-
+function stop(){
  recording=false;
- paused=false;
-
- if(samples.length===0) {
-  updateRecordUI();
-  alert("No samples recorded.");
-  return;
- }
-
- const session={
-  id:"R7-"+Date.now(),
-  name:sessionName,
-  date:new Date().toISOString(),
-  duration:elapsedTime(),
-  distance,
-  samples,
-  sampleCount:samples.length
- };
-
- try {
-  await saveSession(session);
-  await refreshSessions();
-  samples=[];
-  updateRecordUI();
-  alert("SESSION SAVED · "+session.name);
- } catch(e) {
-  alert("ERROR SAVING SESSION: "+e.message);
- }
+ clearInterval(timer);
 }
-
-function updateRecordUI() {
- if(currentModule!=="record") return;
-
- put("timer",formatTime(elapsedTime()));
- put("sampleCount",samples.length);
- put("recordDistance",distance.toFixed(2));
-
- put("maxSpeed",samples.length?
-  Math.max(...samples.map(s=>s.speed||0)):0);
-
- put("maxRPM",samples.length?
-  Math.max(...samples.map(s=>s.rpm||0)):0);
-
- put("recordState",!recording?"SYSTEM READY":
-  paused?"RECORDING PAUSED":"RECORDING ACTIVE");
-
- const pause=$("pauseBtn");
- const start=$("startBtn");
- if(pause) pause.disabled=!recording;
- if(start) start.disabled=recording;
-
- put("recordDetails",
-  recording?
-  (paused?"Recording paused.":"Collecting vehicle data.")+
-  " Samples: "+samples.length:
-  "Ready. "+samples.length+" samples in current buffer."
- );
-}
-
-/* ==========================================
-   GPS
-========================================== */
-
-function haversine(lat1,lon1,lat2,lon2) {
- const R=6371;
- const rad=x=>x*Math.PI/180;
-
- const dLat=rad(lat2-lat1);
- const dLon=rad(lon2-lon1);
-
- const a=Math.sin(dLat/2)**2+
-  Math.cos(rad(lat1))*Math.cos(rad(lat2))*
-  Math.sin(dLon/2)**2;
-
- return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
-
-function startGPS() {
- if(!navigator.geolocation) {
-  put("gpsStatus","GPS NOT SUPPORTED");
-  return;
- }
-
- if(gpsWatch!==null) return;
-
- gpsWatch=navigator.geolocation.watchPosition(
-  position=>{
-   const c=position.coords;
-
-   gpsPosition={
-    lat:c.latitude,
-    lon:c.longitude,
-    accuracy:c.accuracy,
-    speed:c.speed
-   };
-
-   if(recording && !paused && previousGPS) {
-    const delta=haversine(
-     previousGPS.lat,previousGPS.lon,
-     gpsPosition.lat,gpsPosition.lon
-    );
-
-    if(c.accuracy<30 && previousGPS.accuracy<30 && delta<0.1) {
-     distance+=delta;
-    }
-   }
-
-   previousGPS={
-    lat:gpsPosition.lat,
-    lon:gpsPosition.lon,
-    accuracy:gpsPosition.accuracy
-   };
-
-   updateGPSUI();
-  },
-  error=>put("gpsStatus","GPS ERROR: "+error.message),
-  {enableHighAccuracy:true,maximumAge:500,timeout:10000}
- );
-
- put("gpsStatus","GPS SEARCHING");
-}
-
-function stopGPS() {
- if(gpsWatch!==null) {
-  navigator.geolocation.clearWatch(gpsWatch);
-  gpsWatch=null;
- }
- put("gpsStatus","GPS STOPPED");
-}
-
-function gpsHTML() {
- return `
- ${section("GPS POSITION")}
- <div class="grid">
-  ${tile("LATITUDE",'<span id="gpsLat">---</span>',"DEGREES","blue")}
-  ${tile("LONGITUDE",'<span id="gpsLon">---</span>',"DEGREES","blue")}
-  ${tile("ACCURACY",'<span id="gpsAccuracy">---</span>',"METRES","yellow")}
-  ${tile("GPS SPEED",'<span id="gpsSpeed">---</span>',"KM/H","green")}
- </div>
- ${section("GPS SYSTEM")}
- <div class="tile">
-  <div id="gpsStatus" class="green-text">GPS NOT ACTIVE</div>
- </div>
- <div class="actions">
-  <button class="action green" onclick="startGPS()">ENABLE GPS</button>
-  <button class="action red" onclick="stopGPS()">STOP GPS</button>
- </div>
- ${info("GPS requires HTTPS and location permission. Location data is stored in recorded sessions when available.")}
- `;
-}
-
-function updateGPSUI() {
- if(currentModule!=="gps" || !gpsPosition) return;
-
- put("gpsLat",gpsPosition.lat.toFixed(6));
- put("gpsLon",gpsPosition.lon.toFixed(6));
- put("gpsAccuracy",gpsPosition.accuracy.toFixed(1));
-
- put("gpsSpeed",gpsPosition.speed==null?
-  "---":(gpsPosition.speed*3.6).toFixed(1));
-
- put("gpsStatus","GPS ACTIVE");
-}
-
-/* ==========================================
-   MODULE: ANALYSIS
-========================================== */
-
-function analysisHTML() {
- return `
- ${section("SESSION ANALYSIS")}
- <label class="tile-label">SELECT SESSION</label>
- <select id="analysisSelect" onchange="selectAnalysis(this.value)">
-  <option value="">Loading sessions...</option>
- </select>
- <div class="grid">
-  ${tile("DURATION",'<span id="aDuration">---</span>',"MIN")}
-  ${tile("DISTANCE",'<span id="aDistance">---</span>',"KM")}
-  ${tile("MAX SPEED",'<span id="aMaxSpeed">---</span>',"KM/H")}
-  ${tile("MAX RPM",'<span id="aMaxRPM">---</span>',"RPM")}
- </div>
- ${section("SPEED PROFILE")}
- <canvas id="speedChart" width="900" height="280"></canvas>
- ${section("ENGINE RPM PROFILE")}
- <canvas id="rpmChart" width="900" height="280"></canvas>
- ${section("THROTTLE PROFILE")}
- <canvas id="throttleChart" width="900" height="280"></canvas>
- <div class="actions">
-  <button class="action green" onclick="exportSelectedCSV()">EXPORT CSV</button>
-  <button class="action blue" onclick="exportSelectedJSON()">EXPORT JSON</button>
- </div>
- ${info("The graphs use the samples recorded during the selected session. GPS-dependent analysis requires valid GPS samples.")}
- `;
-}
-
-async function refreshAnalysis() {
- const sessions=await refreshSessions();
- const select=$("analysisSelect");
- if(!select) return;
-
- select.innerHTML='<option value="">Choose a session</option>';
-
- sessions.sort((a,b)=>b.date.localeCompare(a.date));
-
- sessions.forEach(s=>{
-  const option=document.createElement("option");
-  option.value=s.id;
-  option.textContent=s.name+" · "+new Date(s.date).toLocaleString();
-  select.appendChild(option);
- });
-
- if(selectedSession && sessions.some(s=>s.id===selectedSession)) {
-  select.value=selectedSession;
-  selectAnalysis(selectedSession);
- }
-}
-
-async function selectAnalysis(id) {
- selectedSession=id;
- if(!id) return;
-
- const session=sessionsCache.find(s=>s.id===id);
- if(!session) return;
-
- const data=session.samples||[];
-
- put("aDuration",formatTime(session.duration||0));
- put("aDistance",Number(session.distance||0).toFixed(2));
-
- put("aMaxSpeed",data.length?
-  Math.max(...data.map(s=>s.speed||0)):0);
-
- put("aMaxRPM",data.length?
-  Math.max(...data.map(s=>s.rpm||0)):0);
-
- drawChart("speedChart",data,"speed","#4bd48b","KM/H");
- drawChart("rpmChart",data,"rpm","#e9c84e","RPM");
- drawChart("throttleChart",data,"throttle","#39b9e9","%");
-}
-
-function drawChart(id,data,key,color,label) {
- const canvas=$(id);
- if(!canvas) return;
-
- const ctx=canvas.getContext("2d");
- const w=canvas.width,h=canvas.height;
- ctx.clearRect(0,0,w,h);
-
- ctx.strokeStyle="#3c454e";
- ctx.lineWidth=1;
-
- for(let i=1;i<=4;i++) {
-  const y=i*h/5;
-  ctx.beginPath();
-  ctx.moveTo(35,y);
-  ctx.lineTo(w-10,y);
-  ctx.stroke();
- }
-
- if(!data.length) {
-  ctx.fillStyle="#89939d";
-  ctx.font="18px Arial";
-  ctx.fillText("NO DATA",w/2-40,h/2);
-  return;
- }
-
- const values=data.map(s=>Number(s[key])||0);
- const max=Math.max(1,...values)*1.12;
- const min=Math.min(0,...values);
-
- ctx.beginPath();
- ctx.strokeStyle=color;
- ctx.lineWidth=3;
-
- values.forEach((v,i)=>{
-  const x=35+(i/Math.max(1,values.length-1))*(w-50);
-  const y=h-20-(v-min)/(max-min)*(h-40);
-  if(i===0) ctx.moveTo(x,y);
-  else ctx.lineTo(x,y);
- });
-
- ctx.stroke();
-
- ctx.fillStyle="#89939d";
- ctx.font="14px Arial";
- ctx.fillText(label,10,18);
- ctx.fillText(max.toFixed(0),8,40);
-}
-
-/* ==========================================
-   CSV EXPORT
-========================================== */
-
-const CSV_FIELDS=[
- "timestamp","elapsed","speed","rpm","gear",
- "throttle","load","coolant","iat","boost",
- "map","atmos","voltage","gx","gy",
- "gpsLat","gpsLon","gpsAccuracy","distanceKm","source"
-];
-
-function csvEscape(value) {
- const text=String(value??"");
- return '"'+text.replace(/"/g,'""')+'"';
-}
-
-function makeCSV(data) {
- const lines=[CSV_FIELDS.join(",")];
-
- data.forEach(sample=>{
-  lines.push(CSV_FIELDS.map(k=>csvEscape(sample[k])).join(","));
- });
-
- return "\uFEFF"+lines.join("\r\n");
-}
-
-function downloadFile(filename,content,type) {
- const blob=new Blob([content],{type});
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download=filename;
- document.body.appendChild(a);
- a.click();
- a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),2000);
-}
-
-async function exportSelectedCSV() {
- if(!selectedSession) {
-  alert("Select a session first.");
-  return;
- }
-
- const session=sessionsCache.find(s=>s.id===selectedSession);
- if(!session) return;
-
- downloadFile(
-  session.name.replace(/[^a-z0-9-_]/gi,"_")+".csv",
-  makeCSV(session.samples||[]),
-  "text/csv;charset=utf-8"
- );
-}
-
-async function exportSelectedJSON() {
- if(!selectedSession) return;
-
- const session=sessionsCache.find(s=>s.id===selectedSession);
- if(!session) return;
-
- downloadFile(
-  session.name+".json",
-  JSON.stringify(session,null,2),
-  "application/json"
- );
-}
-
-async function exportAllCSV() {
- const all=await refreshSessions();
- if(!all.length) {
-  alert("No saved sessions.");
-  return;
- }
-
- all.forEach((s,i)=>{
-  setTimeout(()=>{
-   downloadFile(
-    s.name.replace(/[^a-z0-9-_]/gi,"_")+"_"+i+".csv",
-    makeCSV(s.samples||[]),
-    "text/csv;charset=utf-8"
-   );
-  },i*500);
- });
-}
-
-/* ==========================================
-   MODULE: DIAGNOSTICS
-========================================== */
-
-function diagnosticsHTML() {
- return `
- ${section("ECU DIAGNOSTICS")}
- <div class="grid">
-  ${tile("CONNECTION","OFFLINE","OBD2","red")}
-  ${tile("PROTOCOL","UNKNOWN","ADAPTER","yellow")}
-  ${tile("DTC CODES","---","NOT READ","blue")}
-  ${tile("ECU STATUS","WAITING","CONNECTION","yellow")}
- </div>
- ${section("DIAGNOSTIC FUNCTIONS")}
- <div class="actions">
-  <button class="action blue" onclick="diagnosticInfo()">CONNECTION INFO</button>
-  <button class="action yellow" onclick="diagnosticInfo()">READ ECU</button>
-  <button class="action red" onclick="diagnosticInfo()">READ FAULTS</button>
- </div>
- <div id="diagnosticStatus" class="info">
-  No OBD2 adapter has been configured. No faults have been read.
- </div>
- ${info("Do not clear ECU fault codes or run actuator tests through an unverified connection. Reading and interpreting manufacturer-specific codes requires a compatible interface and protocol.")}
- `;
-}
-
-function diagnosticInfo() {
- put("diagnosticStatus",
-  "OBD2 OFFLINE · Adapter model and transport protocol required before ECU communication.");
-}
-
-/* ==========================================
-   MODULE: SETTINGS
-========================================== */
-
-function settingsHTML() {
- return `
- ${section("SYSTEM CONFIGURATION")}
- <div class="tile">
-  <div class="tile-label">DATA INPUT MODE</div>
-  <select id="inputMode" onchange="setInputMode(this.value)">
-   <option value="simulation" ${simulation?"selected":""}>SIMULATION</option>
-   <option value="real" ${!simulation?"selected":""}>REAL DATA · NOT CONFIGURED</option>
-  </select>
-  <div class="unit">Simulation can be used to test the interface only.</div>
- </div>
- ${section("STORAGE")}
- <div class="grid">
-  ${tile("DATABASE","LOCAL","INDEXEDDB","green")}
-  ${tile("EXPORT","CSV","UTF-8","blue")}
- </div>
- <div class="actions">
-  <button class="action green" onclick="exportAllCSV()">EXPORT ALL SESSIONS</button>
-  <button class="action blue" onclick="exportAllJSON()">BACKUP JSON</button>
-  <button class="action yellow" onclick="storageInfo()">STORAGE STATUS</button>
- </div>
- <div id="storageStatus" class="info">Local storage ready.</div>
- ${section("R7 SYSTEM INFORMATION")}
- ${dataRow("APPLICATION","R7 SYSTEM V1.2")}
- ${dataRow("VEHICLE","RENAULT CLIO V")}
- ${dataRow("PLATFORM","MOBILE WEB")}
- ${dataRow("ORIENTATION","LANDSCAPE")}
- ${dataRow("DATABASE","INDEXEDDB")}
- ${dataRow("OBD ADAPTER","NOT CONFIGURED")}
- ${dataRow("SAMPLE INTERVAL","250 MS")}
- ${info("The application does not send recorded data to an external server. Keep backups of your sessions. Clearing Safari website data can remove local records.")}
- `;
-}
-
-function setInputMode(value) {
- if(value==="real") {
-  simulation=true;
-  alert("Real OBD2 mode is not yet available. Simulation remains active until the adapter and communication protocol are configured.");
-  const select=$("inputMode");
-  if(select) select.value="simulation";
-  return;
- }
-
- simulation=true;
- $("systemStatus").textContent="SIMULATION";
-}
-
-async function storageInfo() {
- const all=await refreshSessions();
- put("storageStatus",
-  "DATABASE ONLINE · "+all.length+" SAVED SESSIONS");
-}
-
-async function exportAllJSON() {
- const all=await refreshSessions();
- if(!all.length) {
-  alert("No saved sessions.");
-  return;
- }
-
- downloadFile(
-  "R7_SYSTEM_BACKUP.json",
-  JSON.stringify(all,null,2),
-  "application/json"
- );
-}
-
-/* ==========================================
-   INITIALIZATION
-========================================== */
-
-async function initialize() {
- try {
-  await openDB();
-  await refreshSessions();
-  $("systemStatus").textContent="SIMULATION";
- } catch(e) {
-  $("systemStatus").textContent="STORAGE ERROR";
-  console.error(e);
- }
-}
-
-initialize();
-
-/* Keep orientation information available.
-   iOS Safari may not allow orientation locking. */
-
-window.addEventListener("resize",()=>{
- if(currentModule==="gforce") drawG();
-});
-
 </script>
 </body>
 </html>
