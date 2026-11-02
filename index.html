@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Clio V Rally 7 Pro Dash</title>
+    <title>Clio V Rally Spec Dash</title>
     <style>
         :root {
-            --bg-color: #030406;
-            --panel-bg: #090c10;
-            --panel-border: #1f2633;
+            --bg-color: #040507;
+            --panel-bg: #0b0e14;
+            --panel-border: #1a202c;
             --accent-green: #00ff66;
             --accent-yellow: #ffb700;
             --accent-red: #ff1e38;
@@ -26,9 +26,26 @@
             display: flex; flex-direction: column;
             padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
         }
+        /* Splash overlay opcional de 1 segundo sin JS bloqueante */
+        #splash {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+            animation: fadeOutSplash 1s forwards 1.2s; pointer-events: none;
+        }
+        @keyframes fadeOutSplash { to { opacity: 0; visibility: hidden; } }
+
+        /* Rombo Renault Minimalista */
+        .rhombus-container { width: 50px; height: 50px; position: relative; margin-bottom: 12px; }
+        .rhombus {
+            position: absolute; width: 30px; height: 30px; border: 2px solid var(--accent-cyan);
+            transform: rotate(45deg); left: 10px; top: 10px;
+            box-shadow: 0 0 15px rgba(0,240,255,0.4);
+        }
+        
         header {
-            background: var(--panel-bg); border-bottom: 2px solid var(--panel-border);
-            padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
+            background: var(--panel-bg); border-bottom: 1px solid var(--panel-border);
+            padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;
         }
         .brand-tag { font-size: 11px; font-weight: 900; color: var(--text-muted); letter-spacing: 2px; }
         .brand-tag span { color: var(--accent-red); }
@@ -36,61 +53,84 @@
             display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 800;
             background: #040608; padding: 4px 10px; border-radius: 12px; border: 1px solid var(--panel-border);
         }
-        .led-dot { width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent-red); }
-        .led-dot.active { background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+        .led-dot { width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
+
         nav { display: flex; background: #020305; border-bottom: 1px solid var(--panel-border); }
         .nav-btn {
-            flex: 1; padding: 12px 0; text-align: center; font-size: 10px; font-weight: 900;
+            flex: 1; padding: 10px 0; text-align: center; font-size: 9px; font-weight: 900;
             color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent;
             text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
         }
-        .nav-btn.active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); background: rgba(0, 240, 255, 0.03); }
-        main { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .tab-content { display: none; height: 100%; flex-direction: column; gap: 10px; }
+        .nav-btn.active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); background: rgba(0, 240, 255, 0.04); }
+
+        main { flex: 1; padding: 8px; overflow-y: auto; }
+        .tab-content { display: none; height: 100%; flex-direction: column; gap: 8px; }
         .tab-content.active { display: flex; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; }
+
         .card {
             background: var(--panel-bg); border: 1px solid var(--panel-border);
-            border-radius: 10px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between;
+            border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
         }
         .card-full { grid-column: span 2; }
         .card-header { display: flex; justify-content: space-between; align-items: center; }
         .card-title { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .card-body { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin: 6px 0; }
-        .value { font-size: 42px; font-weight: 900; font-family: monospace; color: #ffffff; }
+
+        .card-body { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin: 2px 0; }
+        .value { font-size: 40px; font-weight: 900; font-family: monospace; color: #ffffff; letter-spacing: -1px; }
         .unit { font-size: 11px; font-weight: 800; color: var(--text-muted); }
-        .shift-lights { display: flex; gap: 4px; margin-top: 6px; width: 100%; }
-        .shift-led { flex: 1; height: 8px; background: #131722; border-radius: 2px; }
-        .shift-led.green.on { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
-        .shift-led.yellow.on { background: var(--accent-yellow); box-shadow: 0 0 8px var(--accent-yellow); }
-        .shift-led.red.on { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
+
+        /* Shift Lights Secuenciales de LEDs Físicos */
+        .shift-lights { display: flex; gap: 4px; margin-top: 4px; width: 100%; }
+        .shift-led { flex: 1; height: 10px; background: #131722; border-radius: 2px; }
+        .shift-led.green.on { background: var(--accent-green); box-shadow: 0 0 10px var(--accent-green); }
+        .shift-led.yellow.on { background: var(--accent-yellow); box-shadow: 0 0 10px var(--accent-yellow); }
+        .shift-led.red.on { background: var(--accent-red); box-shadow: 0 0 12px var(--accent-red); }
+        .shift-led.blink { background: #ffffff !important; box-shadow: 0 0 16px #ffffff !important; }
+
+        /* G-Meter */
         .g-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; }
-        .g-circle { width: 150px; height: 150px; border-radius: 50%; border: 1px dashed var(--panel-border); position: relative; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.3); }
-        .g-ball { width: 14px; height: 14px; background: var(--accent-cyan); border-radius: 50%; position: absolute; box-shadow: 0 0 10px var(--accent-cyan); }
+        .g-circle { width: 130px; height: 130px; border-radius: 50%; border: 1px dashed var(--panel-border); position: relative; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); }
+        .g-cross-h { position: absolute; width: 100%; height: 1px; background: var(--panel-border); }
+        .g-cross-v { position: absolute; height: 100%; width: 1px; background: var(--panel-border); }
+        .g-ball { width: 12px; height: 12px; background: var(--accent-cyan); border-radius: 50%; position: absolute; box-shadow: 0 0 10px var(--accent-cyan); transition: transform 0.05s linear; }
+
         .btn-connect {
-            width: 100%; padding: 14px; background: var(--accent-cyan); color: #000;
-            border: none; border-radius: 6px; font-weight: 900; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+            width: 100%; padding: 12px; background: var(--accent-cyan); color: #000;
+            border: none; border-radius: 6px; font-weight: 900; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
         }
     </style>
 </head>
 <body>
+
+    <div id="splash">
+        <div class="rhombus-container">
+            <div class="rhombus"></div>
+        </div>
+        <div style="font-size: 14px; font-weight: 900; letter-spacing: 4px; color: #fff;">RENAULT SPORT</div>
+        <div style="font-size: 9px; font-weight: 700; color: var(--accent-cyan); letter-spacing: 2px; margin-top: 4px;">CLIO V RALLY 7</div>
+    </div>
+
     <header>
         <div class="brand-tag">CLIO V <span>RALLY 7</span></div>
         <div class="status-pill">
-            <div class="led-dot" id="status-led"></div>
-            <span id="status-text">SIMULACIÓN ACTIVA</span>
+            <div class="led-dot"></div>
+            <span>SIMULACIÓN TELEMETRÍA</span>
         </div>
     </header>
+
     <nav>
         <button class="nav-btn active" onclick="switchTab('main', event)">General</button>
-        <button class="nav-btn" onclick="switchTab('turbo', event)">Turbo</button>
+        <button class="nav-btn" onclick="switchTab('turbo', event)">Turbo / Engine</button>
         <button class="nav-btn" onclick="switchTab('gforce', event)">G-Meter</button>
     </nav>
+
     <main>
+        <!-- GENERAL -->
         <div id="tab-main" class="tab-content active">
             <div class="grid-2">
                 <div class="card card-full">
-                    <div class="card-header"><span class="card-title">Revoluciones Motor (RPM)</span></div>
+                    <div class="card-header"><span class="card-title">Tacómetro (RPM)</span></div>
                     <div class="card-body"><span class="value" id="rpm-val">0</span><span class="unit">RPM</span></div>
                     <div class="shift-lights">
                         <div class="shift-led green" id="led-1"></div>
@@ -99,101 +139,10 @@
                         <div class="shift-led yellow" id="led-4"></div>
                         <div class="shift-led red" id="led-5"></div>
                         <div class="shift-led red" id="led-6"></div>
+                        <div class="shift-led red" id="led-7"></div>
+                        <div class="shift-led red" id="led-8"></div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-header"><span class="card-title">Velocidad</span></div>
-                    <div class="card-body"><span class="value" id="speed-val">0</span><span class="unit">KM/H</span></div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><span class="card-title">Carga ECU</span></div>
-                    <div class="card-body"><span class="value" id="load-val">0</span><span class="unit">%</span></div>
-                </div>
-            </div>
-            <button class="btn-connect" onclick="connectOBD()">Conectar Adaptador OBD</button>
-        </div>
-        <div id="tab-turbo" class="tab-content">
-            <div class="grid-2">
-                <div class="card card-full">
-                    <div class="card-header"><span class="card-title">Presión Turbo Relativa</span></div>
-                    <div class="card-body"><span class="value" id="boost-val">0.00</span><span class="unit">BAR</span></div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><span class="card-title">MAP Absoluto</span></div>
-                    <div class="card-body"><span class="value" id="map-val">0</span><span class="unit">kPa</span></div>
-                </div>
-                <div class="card">
-                    <div class="card-header"><span class="card-title">Temperatura IAT</span></div>
-                    <div class="card-body"><span class="value" id="iat-val">0</span><span class="unit">°C</span></div>
-                </div>
-            </div>
-        </div>
-        <div id="tab-gforce" class="tab-content">
-            <div class="card card-full" style="height: 100%;">
-                <div class="card-header"><span class="card-title">Fuerzas G (Acelerómetro)</span></div>
-                <div class="g-container">
-                    <div class="g-circle">
-                        <div class="g-ball" id="g-ball"></div>
-                    </div>
-                    <div style="margin-top: 12px; font-size: 11px; color: var(--text-muted); font-family: monospace;">
-                        LAT: <span id="g-lat" style="color:var(--accent-cyan)">0.00</span> G | LONG: <span id="g-long" style="color:var(--accent-cyan)">0.00</span> G
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-    <script>
-        function switchTab(tabId, event) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById('tab-' + tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
-        }
-
-        if (window.DeviceMotionEvent) {
-            window.addEventListener('devicemotion', (event) => {
-                if (event.accelerationIncludingGravity) {
-                    let ax = event.accelerationIncludingGravity.x || 0;
-                    let ay = event.accelerationIncludingGravity.y || 0;
-                    let gLat = (ax / 9.81).toFixed(2);
-                    let gLong = (ay / 9.81).toFixed(2);
-                    document.getElementById('g-lat').innerText = gLat;
-                    document.getElementById('g-long').innerText = gLong;
-                    let posX = Math.max(-60, Math.min(60, gLat * 40));
-                    let posY = Math.max(-60, Math.min(60, -gLong * 40));
-                    const ball = document.getElementById('g-ball');
-                    if(ball) ball.style.transform = `translate(${posX}px, ${posY}px)`;
-                }
-            });
-        }
-
-        setInterval(() => {
-            let t = Date.now() / 1000;
-            let rpm = Math.round(2500 + 4000 * Math.abs(Math.sin(t * 1.5)));
-            let boost = Math.max(0.0, 0.3 + 1.1 * Math.sin(t));
-            let speed = Math.round(50 + 70 * Math.abs(Math.sin(t)));
-            let load = 75;
-            let iat = 42;
-
-            document.getElementById('rpm-val').innerText = rpm;
-            document.getElementById('speed-val').innerText = speed;
-            document.getElementById('load-val').innerText = load;
-            document.getElementById('boost-val').innerText = boost.toFixed(2);
-            document.getElementById('map-val').innerText = Math.round((boost * 100) + 101.3);
-            document.getElementById('iat-val').innerText = iat;
-
-            for (let i = 1; i <= 6; i++) document.getElementById('led-' + i).classList.remove('on');
-            let activeLeds = Math.min(6, Math.floor((rpm / 6500) * 6));
-            for (let i = 1; i <= activeLeds; i++) {
-                const led = document.getElementById('led-' + i);
-                led.classList.add('on');
-                led.className = 'shift-led ' + (i <= 2 ? 'green' : (i <= 4 ? 'yellow' : 'red') ) + ' on';
-            }
-        }, 100);
-
-        async function connectOBD() {
-            alert("Buscando adaptador Bluetooth OBD2...");
-        }
-    </script>
-</body>
-</html>
+                    <div class="card-body"><span class="value" id="speed-
