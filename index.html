@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Clio V Rally 7 - Telemetría & OBD2</title>
+<title>Clio V Rally 7 - Telemetría Total</title>
 <style>
 :root {
   --bg-dark: #030406;
@@ -18,7 +18,6 @@
   --c-muted: #627282;
 }
 
-/* TEMA CLARO / OSCURO */
 body.light-theme {
   --bg-dark: #e0e4eb;
   --panel-case: #cbd2df;
@@ -37,7 +36,6 @@ html, body {
   width: 100vw; height: 100vh; height: 100dvh; overflow: hidden;
   background: var(--bg-dark); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   display: flex; justify-content: center; align-items: center;
-  transition: background 0.3s;
 }
 
 #app {
@@ -47,7 +45,7 @@ html, body {
   position: relative;
 }
 
-/* ALERTA ROJA GLOBAL DE TRAMO */
+/* ALERTA ROJA GLOBAL */
 #global-alarm {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(255, 34, 56, 0.95); z-index: 100;
@@ -59,42 +57,39 @@ html, body {
 #global-alarm h1 { font-size: 28px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; }
 #global-alarm p { font-size: 15px; font-weight: 800; letter-spacing: 1px; }
 
-/* LA BOTONERA 208 RALLY */
+/* LA BOTONERA 208 RALLY (FORZADA EN HORIZONTAL ÓPTIMA) */
 .rally-plate {
-  width: 92%; max-width: 600px; height: 88%; max-height: 350px;
+  width: 95%; max-width: 620px; height: 85%; max-height: 340px;
   background: var(--panel-case); border: 4px solid #1a1e26; border-radius: 18px;
-  padding: 12px 16px; display: grid; grid-template-columns: 46px 1fr 46px; gap: 14px;
+  padding: 10px 14px; display: grid; grid-template-columns: 46px 1fr 46px; gap: 12px;
   box-shadow: inset 0 0 35px rgba(0,0,0,0.95), 0 10px 30px rgba(0,0,0,0.8);
-  align-items: center; position: relative; transition: background 0.3s, border-color 0.3s;
+  align-items: center; position: relative;
 }
 
-/* BOTÓN LATERAL IZQUIERDO: BLUETOOTH OBD2 */
 .status-side { display: flex; flex-direction: column; height: 100%; justify-content: center; }
 .status-pad {
   height: 100%; background: #111419; border: 2.5px solid var(--c-muted); border-radius: 10px; color: var(--c-muted);
   display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-  padding: 10px 0; font-weight: 900; font-size: 8px; cursor: pointer; text-align: center;
+  padding: 8px 0; font-weight: 900; font-size: 8px; cursor: pointer; text-align: center;
 }
 .status-pad.connected { border-color: var(--c-green); color: var(--c-green); box-shadow: 0 0 12px rgba(0,255,102,0.3); }
 
-/* BOTÓN LATERAL DERECHO: AJUSTES (ALARGADO) */
 .settings-side { display: flex; flex-direction: column; height: 100%; justify-content: center; }
 .settings-pad {
   height: 100%; background: #111419; border: 2.5px solid var(--c-blue); border-radius: 10px; color: var(--c-blue);
   display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-  padding: 10px 0; font-weight: 900; font-size: 8px; cursor: pointer; text-align: center;
+  padding: 8px 0; font-weight: 900; font-size: 8px; cursor: pointer; text-align: center;
   box-shadow: 0 0 10px rgba(0,240,255,0.2);
 }
-.settings-pad:active { transform: scale(0.95); filter: brightness(1.2); }
 
-.keypad-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; height: 100%; }
+.keypad-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr; gap: 6px; height: 100%; }
 
-.btn-cell { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.05s, filter 0.05s; }
+.btn-cell { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; }
 .btn-cell:active { transform: scale(0.96); filter: brightness(1.3); }
 .btn-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.btn-shape { fill: #0c0e12; stroke: var(--c-muted); stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; transition: fill 0.3s; }
-.led-diode { position: absolute; top: 7px; right: 14px; width: 6px; height: 6px; border-radius: 50%; background: #181818; z-index: 3; }
-.btn-cell.active .led-diode { background: var(--c-red); box-shadow: 0 0 8px var(--c-red); }
+.btn-shape { fill: #0c0e12; stroke: var(--c-muted); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.led-diode { position: absolute; top: 5px; right: 10px; width: 5px; height: 5px; border-radius: 50%; background: #181818; z-index: 3; }
+.btn-cell.active .led-diode { background: var(--c-red); box-shadow: 0 0 6px var(--c-red); }
 
 .btn-cell.red .btn-shape { stroke: var(--c-red); }
 .btn-cell.green .btn-shape { stroke: var(--c-green); }
@@ -106,46 +101,44 @@ html, body {
 .btn-cell.yellow .btn-content { color: var(--c-yellow); }
 .btn-cell.blue .btn-content { color: var(--c-blue); }
 
-.btn-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 2px; pointer-events: none; }
-.btn-title { font-size: 8px; font-weight: 900; letter-spacing: 0.5px; line-height: 1.1; }
-.btn-icon { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.4; }
+.btn-content { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1px; pointer-events: none; }
+.btn-title { font-size: 7.5px; font-weight: 900; letter-spacing: 0.3px; line-height: 1.0; }
+.btn-icon { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.2; }
 
-/* PANTALLAS DE INFORMACIÓN PROFESIONALES */
+/* PANTALLAS OVERLAY */
 .telemetry-overlay {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 7, 10, 0.99);
-  border-radius: 14px; padding: 12px; display: none; flex-direction: column; justify-content: space-between; z-index: 50; border: 2.5px solid #283345;
+  border-radius: 14px; padding: 10px; display: none; flex-direction: column; justify-content: space-between; z-index: 50; border: 2.5px solid #283345;
 }
 .telemetry-overlay.active { display: flex; }
 
-.overlay-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1e2633; padding-bottom: 6px; }
-.overlay-title { font-size: 12px; font-weight: 900; letter-spacing: 2px; color: var(--c-blue); }
-.close-btn { background: #ff2238; border: none; color: #fff; padding: 5px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; cursor: pointer; letter-spacing: 1px; }
+.overlay-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1e2633; padding-bottom: 4px; }
+.overlay-title { font-size: 11px; font-weight: 900; letter-spacing: 1.5px; color: var(--c-blue); }
+.close-btn { background: #ff2238; border: none; color: #fff; padding: 4px 10px; border-radius: 4px; font-weight: 900; font-size: 9px; cursor: pointer; }
 
-.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; margin-top: 8px; overflow-y: auto; }
-.data-card { background: #0c1017; border: 2px solid #1c2533; border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-.data-card label { font-size: 8px; font-weight: 900; color: var(--c-muted); letter-spacing: 1.5px; }
-.data-card .value { font-size: 28px; font-weight: 900; font-family: monospace; color: var(--c-white); line-height: 1; }
-.data-card .unit { font-size: 10px; font-weight: 800; color: var(--c-muted); text-align: right; }
-.status-tag { font-size: 8px; font-weight: 900; padding: 2px 6px; border-radius: 3px; display: inline-block; width: fit-content; margin-top: 4px; }
+.data-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; flex: 1; margin-top: 6px; overflow-y: auto; }
+.data-card { background: #0c1017; border: 1.5px solid #1c2533; border-radius: 6px; padding: 6px 10px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
+.data-card label { font-size: 7.5px; font-weight: 900; color: var(--c-muted); letter-spacing: 1px; }
+.data-card .value { font-size: 24px; font-weight: 900; font-family: monospace; color: var(--c-white); line-height: 1; }
+.data-card .unit { font-size: 9px; font-weight: 800; color: var(--c-muted); text-align: right; }
+.status-tag { font-size: 7.5px; font-weight: 900; padding: 2px 4px; border-radius: 3px; display: inline-block; width: fit-content; margin-top: 2px; }
 .status-tag.ok { background: rgba(0,255,102,0.15); color: var(--c-green); border: 1px solid var(--c-green); }
 .status-tag.warn { background: rgba(255,183,0,0.15); color: var(--c-yellow); border: 1px solid var(--c-yellow); }
 .status-tag.danger { background: rgba(255,34,56,0.2); color: var(--c-red); border: 1px solid var(--c-red); }
 
-/* ESTILOS PANEL DE AJUSTES */
-.setting-row { display: flex; justify-content: space-between; align-items: center; background: #0c1017; border: 1px solid #1c2533; padding: 10px 14px; border-radius: 6px; margin-bottom: 6px; }
-.setting-row span { font-size: 11px; font-weight: 800; color: #fff; }
-.setting-btn { background: #1e2633; color: #fff; border: 1px solid #3b4657; padding: 6px 12px; border-radius: 4px; font-weight: 900; font-size: 10px; cursor: pointer; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; background: #0c1017; border: 1px solid #1c2533; padding: 8px 12px; border-radius: 6px; margin-bottom: 4px; }
+.setting-row span { font-size: 10px; font-weight: 800; color: #fff; }
+.setting-btn { background: #1e2633; color: #fff; border: 1px solid #3b4657; padding: 5px 10px; border-radius: 4px; font-weight: 900; font-size: 9px; cursor: pointer; }
 .setting-btn.active { background: var(--c-green); color: #000; border-color: var(--c-green); }
 </style>
 </head>
 <body>
 
 <div id="app">
-  <!-- ALERTA ROJA GLOBAL -->
   <div id="global-alarm">
     <h1 id="alarm-title">⚠️ ¡ALERTA CRÍTICA DE TRAMO!</h1>
-    <p id="alarm-desc">PARÁMETRO FUERA DE RANGO SEGURO. ¡BAJA EL RITMO INMEDIATAMENTE!</p>
-    <button onclick="dismissAlarm()" style="margin-top:15px; padding:8px 20px; background:#fff; color:#000; border:none; font-weight:900; border-radius:4px; cursor:pointer; font-size:12px;">SILENCIAR</button>
+    <p id="alarm-desc">PARÁMETRO FUERA DE RANGO SEGURO. ¡BAJA EL RITMO!</p>
+    <button onclick="dismissAlarm()" style="margin-top:12px; padding:6px 16px; background:#fff; color:#000; border:none; font-weight:900; border-radius:4px; cursor:pointer; font-size:11px;">SILENCIAR</button>
   </div>
 
   <div class="rally-plate">
@@ -153,13 +146,13 @@ html, body {
     <!-- LATERAL IZQUIERDO: BLUETOOTH OBD2 -->
     <div class="status-side">
       <div class="status-pad" id="bt-pad" onclick="connectOBD2()">
-        <span style="font-size:14px;">📶</span>
+        <span style="font-size:12px;">📶</span>
         <span>OBD2<br>BLE</span>
-        <span id="bt-status-txt" style="font-size:7px;">CONECTAR</span>
+        <span id="bt-status-txt" style="font-size:6.5px;">CONECTAR</span>
       </div>
     </div>
 
-    <!-- MATRIZ CENTRAL 100% MONITORIZACIÓN -->
+    <!-- MATRIZ CENTRAL -->
     <div class="keypad-grid">
 
       <!-- 1. MOTOR & TEMPS -->
@@ -260,16 +253,16 @@ html, body {
 
     </div>
 
-    <!-- LATERAL DERECHO: AJUSTES (ALARGADO) -->
+    <!-- LATERAL DERECHO: AJUSTES -->
     <div class="settings-side">
       <div class="settings-pad" onclick="openDisplay('settings')">
-        <span style="font-size:16px;">⚙️</span>
+        <span style="font-size:14px;">⚙️</span>
         <span>CONFIG<br>Y TEMA</span>
-        <span style="font-size:7px; color:var(--c-blue);">AJUSTES</span>
+        <span style="font-size:6.5px; color:var(--c-blue);">AJUSTES</span>
       </div>
     </div>
 
-    <!-- PANTALLAS DE INFORMACIÓN CLARA -->
+    <!-- PANTALLAS DE INFORMACIÓN -->
     <div class="telemetry-overlay" id="overlay">
       <div class="overlay-header">
         <span class="overlay-title" id="ov-title">MONITOR</span>
@@ -283,11 +276,7 @@ html, body {
 
 <script>
 let audioCtx = null;
-let settings = {
-  sound: true,
-  vibrate: true,
-  theme: 'dark'
-};
+let settings = { sound: true, vibrate: true, theme: 'dark' };
 
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -316,23 +305,25 @@ function actionFeedback(freq = 650) {
   playBeep(freq, 0.05);
 }
 
-/* CONEXIÓN BLUETOOTH OBD2 REAL */
+/* GESTIÓN BLUETOOTH OBD2 ROBUSTA */
 let bluetoothDevice = null;
 let bluetoothServer = null;
 
 async function connectOBD2() {
   actionFeedback(750);
+  
+  // Verificación amigable compatible con iOS y Safari
+  if (!navigator.bluetooth) {
+    alert("Para conectar por Bluetooth en iOS, asegúrate de abrir el enlace directamente en Safari o mediante la PWA instalada, y que el Bluetooth del iPhone esté activado.");
+    return;
+  }
+  
   try {
-    if (!navigator.bluetooth) {
-      alert("Tu navegador o dispositivo no soporta Web Bluetooth.");
-      return;
-    }
-    
     document.getElementById('bt-status-txt').innerText = "BUSCANDO...";
     
     bluetoothDevice = await navigator.bluetooth.requestDevice({
-      filters: [{ services: ['0000ffe0-0000-1000-8000-00805f9b34fb'] }, { namePrefix: 'OBD' }, { namePrefix: 'ELM' }],
-      optionalServices: ['0000ffe0-0000-1000-8000-00805f9b34fb']
+      acceptAllDevices: true,
+      optionalServices: ['0000ffe0-0000-1000-8000-00805f9b34fb', '0000180f-0000-1000-8000-00805f9b34fb']
     });
 
     bluetoothServer = await bluetoothDevice.gatt.connect();
@@ -341,8 +332,7 @@ async function connectOBD2() {
     actionFeedback(900);
   } catch (error) {
     console.log("Error Bluetooth: ", error);
-    document.getElementById('bt-status-txt').innerText = "ERROR / FAIL";
-    setTimeout(() => { document.getElementById('bt-status-txt').innerText = "CONECTAR"; }, 2000);
+    document.getElementById('bt-status-txt').innerText = "CONECTAR";
   }
 }
 
@@ -390,56 +380,56 @@ function openDisplay(type) {
       <div class="data-card"><label>REFRIGERANTE (ECT)</label><div class="value" id="ect-v">--</div><div class="unit">°C</div><div class="status-tag" id="ect-tag">COMPROBANDO</div></div>
       <div class="data-card"><label>ADMISIÓN (IAT)</label><div class="value" id="iat-v">--</div><div class="unit">°C</div><div class="status-tag" id="iat-tag">COMPROBANDO</div></div>
       <div class="data-card"><label>ACEITE MOTOR</label><div class="value" id="oil-t-v">--</div><div class="unit">°C</div><div class="status-tag" id="oil-t-tag">COMPROBANDO</div></div>
-      <div class="data-card"><label>ESTADO GENERAL</label><div class="value" style="font-size:20px; color:var(--c-green)">ÓPTIMO</div><div class="unit">SAFETY</div><div class="status-tag ok">SIN RIESGO</div></div>
+      <div class="data-card"><label>ESTADO GENERAL</label><div class="value" style="font-size:18px; color:var(--c-green)">ÓPTIMO</div><div class="unit">SAFETY</div><div class="status-tag ok">SIN RIESGO</div></div>
     `;
   } else if (type === 'pressures') {
     title.innerText = "MONITOR DE PRESIONES DE TRAMO";
     content.innerHTML = `
-      <div class="data-card"><label>TURBO BOOST REL.</label><div class="value" id="boost-v">--</div><div class="unit">BAR</div><div class="status-tag ok">PRESIÓN ESTABLE</div></div>
+      <div class="data-card"><label>TURBO BOOST REL.</label><div class="value" id="boost-v">--</div><div class="unit">BAR</div><div class="status-tag ok">ESTABLE</div></div>
       <div class="data-card"><label>PRESIÓN ACEITE</label><div class="value" id="oil-p-v">--</div><div class="unit">BAR</div><div class="status-tag" id="oil-p-tag">COMPROBANDO</div></div>
-      <div class="data-card"><label>PRESIÓN COMBUSTIBLE</label><div class="value">3.8</div><div class="unit">BAR</div><div class="status-tag ok">INYECCIÓN OK</div></div>
-      <div class="data-card"><label>PRESIÓN MAP ABS.</label><div class="value" id="map-v">--</div><div class="unit">kPa</div><div class="status-tag ok">SENSOR OK</div></div>
+      <div class="data-card"><label>COMBUSTIBLE</label><div class="value">3.8</div><div class="unit">BAR</div><div class="status-tag ok">INYECCIÓN OK</div></div>
+      <div class="data-card"><label>MAP ABSOLUTO</label><div class="value" id="map-v">--</div><div class="unit">kPa</div><div class="status-tag ok">SENSOR OK</div></div>
     `;
   } else if (type === 'gforces') {
     title.innerText = "DINÁMICA Y FUERZAS G (CHASIS)";
     content.innerHTML = `
       <div class="data-card"><label>ACELERACIÓN LATERAL</label><div class="value" id="g-lat">0.00</div><div class="unit">G</div><div class="status-tag ok">GRIP NORMAL</div></div>
-      <div class="data-card"><label>ACELERACIÓN LONGITUDINAL</label><div class="value" id="g-long">0.00</div><div class="unit">G</div><div class="status-tag ok">FRENADA / ACEL</div></div>
+      <div class="data-card"><label>ACELERACIÓN LONG.</label><div class="value" id="g-long">0.00</div><div class="unit">G</div><div class="status-tag ok">FRENADA / ACEL</div></div>
       <div class="data-card"><label>PICO MÁXIMO G</label><div class="value" id="g-max">0.00</div><div class="unit">G</div><div class="status-tag ok">REGISTRADO</div></div>
-      <div class="data-card"><label>ESTABILIDAD</label><div class="value" style="font-size:20px; color:var(--c-blue)">ACTIVA</div><div class="unit">SENSOR</div><div class="status-tag ok">EN LÍNEA</div></div>
+      <div class="data-card"><label>ESTABILIDAD</label><div class="value" style="font-size:18px; color:var(--c-blue)">ACTIVA</div><div class="unit">SENSOR</div><div class="status-tag ok">EN LÍNEA</div></div>
     `;
   } else if (type === 'faults') {
     title.innerText = "DIAGNÓSTICO Y CÓDIGOS DE ERROR ECU";
     content.innerHTML = `
-      <div class="data-card" style="grid-column:span 2"><label>ESTADO GENERAL CAN-BUS / ECU</label><div class="value" style="font-size:22px; color:var(--c-green)">SISTEMA LIMPIO - SIN DTC</div><div class="unit">H5Ht ECU OK</div><div class="status-tag ok">CERO ERRORES</div></div>
-      <div class="data-card"><label>TENSIÓN DE BATERÍA</label><div class="value" id="volt-v">14.2</div><div class="unit">V</div><div class="status-tag ok">ALTERNADOR OK</div></div>
-      <div class="data-card"><label>ENLACE BLUETOOTH OBD</label><div class="value" id="bt-ui-status" style="font-size:20px; color:var(--c-green)">${bluetoothServer ? 'CONECTADO' : 'EN ESPERA'}</div><div class="unit">ESTADO BLE</div><div class="status-tag ok">LINK</div></div>
+      <div class="data-card" style="grid-column:span 2"><label>ESTADO GENERAL CAN-BUS / ECU</label><div class="value" style="font-size:18px; color:var(--c-green)">SISTEMA LIMPIO - SIN DTC</div><div class="unit">H5Ht ECU OK</div><div class="status-tag ok">CERO ERRORES</div></div>
+      <div class="data-card"><label>TENSIÓN BATERÍA</label><div class="value" id="volt-v">14.2</div><div class="unit">V</div><div class="status-tag ok">ALTERNADOR OK</div></div>
+      <div class="data-card"><label>ENLACE BLUETOOTH OBD</label><div class="value" id="bt-ui-status" style="font-size:16px; color:var(--c-green)">${bluetoothServer ? 'CONECTADO' : 'EN ESPERA'}</div><div class="unit">ESTADO BLE</div><div class="status-tag ok">LINK</div></div>
     `;
   } else if (type === 'stats') {
     title.innerText = "RESUMEN DE RENDIMIENTO DE TRAMO";
     content.innerHTML = `
       <div class="data-card"><label>VELOCIDAD MÁXIMA</label><div class="value">${maxSpd}</div><div class="unit">KM/H</div><div class="status-tag ok">TOP SPEED</div></div>
-      <div class="data-card"><label>PUNTOS DE TELEMETRÍA</label><div class="value">${Math.max(0, logData.length - 1)}</div><div class="unit">MUESTRAS CSV</div></div>
-      <div class="data-card" style="grid-column:span 2"><label>ESTADO DE GRABACIÓN</label><div class="value" style="font-size:22px;">${isRec ? '🔴 GRABANDO EN DIRECTO' : '🟢 EN ESPERA'}</div><div class="unit">BUFFER CSV</div><div class="status-tag ${isRec ? 'danger' : 'ok'}">${isRec ? 'ACTIVO' : 'LISTO'}</div></div>
+      <div class="data-card"><label>PUNTOS TELEMETRÍA</label><div class="value">${Math.max(0, logData.length - 1)}</div><div class="unit">MUESTRAS CSV</div></div>
+      <div class="data-card" style="grid-column:span 2"><label>ESTADO DE GRABACIÓN</label><div class="value" style="font-size:18px;">${isRec ? '🔴 GRABANDO' : '🟢 EN ESPERA'}</div><div class="unit">BUFFER CSV</div><div class="status-tag ${isRec ? 'danger' : 'ok'}">${isRec ? 'ACTIVO' : 'LISTO'}</div></div>
     `;
   } else if (type === 'settings') {
-    title.innerText = "AJUSTES Y CONFIGURACIÓN DE CONSOLA";
+    title.innerText = "AJUSTES Y CONFIGURACIÓN";
     content.innerHTML = `
       <div class="setting-row">
-        <span>TEMA VISUAL (BLANCO / NEGRO)</span>
-        <button class="setting-btn active" id="theme-btn" onclick="toggleTheme()">${settings.theme === 'dark' ? 'MODO NEGRO' : 'MODO BLANCO'}</button>
+        <span>TEMA VISUAL</span>
+        <button class="setting-btn active" onclick="toggleTheme()">${settings.theme === 'dark' ? 'MODO NEGRO' : 'MODO BLANCO'}</button>
       </div>
       <div class="setting-row">
-        <span>EFECTOS DE SONIDO (BIPS)</span>
-        <button class="setting-btn ${settings.sound ? 'active' : ''}" id="sound-btn" onclick="toggleSetting('sound')">${settings.sound ? 'ACTIVADO' : 'DESACTIVADO'}</button>
+        <span>EFECTOS DE SONIDO</span>
+        <button class="setting-btn ${settings.sound ? 'active' : ''}" onclick="toggleSetting('sound')">${settings.sound ? 'ON' : 'OFF'}</button>
       </div>
       <div class="setting-row">
         <span>VIBRACIÓN HÁPTICA</span>
-        <button class="setting-btn ${settings.vibrate ? 'active' : ''}" id="vib-btn" onclick="toggleSetting('vibrate')">${settings.vibrate ? 'ACTIVADA' : 'DESACTIVADA'}</button>
+        <button class="setting-btn ${settings.vibrate ? 'active' : ''}" onclick="toggleSetting('vibrate')">${settings.vibrate ? 'ON' : 'OFF'}</button>
       </div>
       <div class="setting-row" style="grid-column:span 2">
         <span>ESTADO BLUETOOTH OBD2</span>
-        <span style="color:var(--c-green); font-weight:900;" id="st-bt-label">${bluetoothServer ? 'CONECTADO' : 'DESCONECTADO'}</span>
+        <span style="color:var(--c-green); font-weight:900;">${bluetoothServer ? 'CONECTADO' : 'DESCONECTADO'}</span>
       </div>
     `;
   }
@@ -458,18 +448,14 @@ function dismissAlarm() {
 function toggleSetting(key) {
   settings[key] = !settings[key];
   actionFeedback(700);
-  // Refrescar panel de ajustes
   openDisplay('settings');
 }
 
 function toggleTheme() {
   settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
   actionFeedback(700);
-  if (settings.theme === 'light') {
-    document.body.classList.add('light-theme');
-  } else {
-    document.body.classList.remove('light-theme');
-  }
+  if (settings.theme === 'light') document.body.classList.add('light-theme');
+  else document.body.classList.remove('light-theme');
   openDisplay('settings');
 }
 
@@ -504,7 +490,7 @@ setInterval(() => {
     elIat.innerText = iat;
     let tg = document.getElementById('iat-tag');
     tg.className = 'status-tag ' + (iat > 55 ? 'danger' : (iat > 48 ? 'warn' : 'ok'));
-    tg.innerText = iat > 55 ? 'ALERTA ADMISIÓN' : (iat > 48 ? 'ELEVADO' : 'ÓPTIMO');
+    tg.innerText = iat > 55 ? 'ALERTA ADM.' : (iat > 48 ? 'ELEVADO' : 'ÓPTIMO');
   }
 
   const elEct = document.getElementById('ect-v'); 
@@ -512,7 +498,7 @@ setInterval(() => {
     elEct.innerText = ect;
     let tg = document.getElementById('ect-tag');
     tg.className = 'status-tag ' + (ect > 102 ? 'danger' : (ect > 98 ? 'warn' : 'ok'));
-    tg.innerText = ect > 102 ? '¡PELIGRO CALOR!' : (ect > 98 ? 'VIGILAR' : 'ESTABLE');
+    tg.innerText = ect > 102 ? '¡PELIGRO!' : (ect > 98 ? 'VIGILAR' : 'ESTABLE');
   }
 
   const elOilT = document.getElementById('oil-t-v'); 
@@ -520,7 +506,7 @@ setInterval(() => {
     elOilT.innerText = oilT;
     let tg = document.getElementById('oil-t-tag');
     tg.className = 'status-tag ' + (oilT > 115 ? 'danger' : (oilT > 108 ? 'warn' : 'ok'));
-    tg.innerText = oilT > 115 ? 'ACEITE CALIENTE' : 'CORRECTO';
+    tg.innerText = oilT > 115 ? 'CALIENTE' : 'CORRECTO';
   }
 
   const elBst = document.getElementById('boost-v'); if (elBst) elBst.innerText = boost.toFixed(2);
@@ -530,16 +516,14 @@ setInterval(() => {
     elOilP.innerText = oilP;
     let tg = document.getElementById('oil-p-tag');
     tg.className = 'status-tag ' + (oilP < 2.0 ? 'danger' : 'ok');
-    tg.innerText = oilP < 2.0 ? '¡PRESIÓN BAJA!' : 'PRESIÓN OK';
+    tg.innerText = oilP < 2.0 ? '¡BAJA!' : 'OK';
   }
 
   const elGLat = document.getElementById('g-lat'); if (elGLat) elGLat.innerText = currentGLat;
   const elGLong = document.getElementById('g-long'); if (elGLong) elGLong.innerText = currentGLong;
   const elGMax = document.getElementById('g-max'); if (elGMax) elGMax.innerText = maxG;
 
-  // Alarma global de seguridad en tramo
-  let alarmActive = false;
-  let reason = "";
+  let alarmActive = false, reason = "";
   if (ect > 102) { alarmActive = true; reason = `¡REFRIGERANTE CRÍTICO (${ect}°C)! REDUCE RITMO.`; }
   else if (oilP < 1.8) { alarmActive = true; reason = `¡PRESIÓN DE ACEITE BAJA (${oilP} BAR)! PARA YA.`; }
   else if (oilT > 118) { alarmActive = true; reason = `¡TEMPERATURA DE ACEITE AL LÍMITE (${oilT}°C)!`; }
