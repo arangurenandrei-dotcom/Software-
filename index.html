@@ -1,110 +1,1173 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Clio V Rally4 Keypad & Dash</title>
-    <style>
-        :root {
-            --bg-color: #050608;
-            --box-bg: #0d1117;
-            --box-border: #161b22;
-            --accent-green: #00ff66;
-            --accent-yellow: #ffb700;
-            --accent-red: #ff1e38;
-            --accent-cyan: #00f0ff;
-            --accent-blue: #0088ff;
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
-        }
-        * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
-        body {
-            background-color: var(--bg-color); color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0; padding: 0; height: 100vh; width: 100vw; overflow: hidden;
-            display: flex; flex-direction: column;
-            padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom);
-        }
-        
-        header {
-            background: #090c10; border-bottom: 2px solid var(--box-border);
-            padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .brand-tag { font-size: 11px; font-weight: 900; letter-spacing: 2px; color: var(--text-muted); }
-        .brand-tag span { color: var(--accent-red); }
-        .status-pill {
-            display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 800;
-            background: #040608; padding: 4px 10px; border-radius: 12px; border: 1px solid var(--box-border);
-        }
-        .led-dot { width: 6px; height: 6px; border-radius: 50%; background-color: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#171a1e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="R7 SYSTEM">
+<title>R7 SYSTEM</title>
 
-        nav { display: flex; background: #020305; border-bottom: 1px solid var(--box-border); }
-        .nav-btn {
-            flex: 1; padding: 10px 0; text-align: center; font-size: 9px; font-weight: 900;
-            color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent;
-            text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
-        }
-        .nav-btn.active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); background: rgba(0, 240, 255, 0.04); }
+<style>
+:root {
+  --bg:#171a1e;
+  --panel:#22272d;
+  --panel2:#292f36;
+  --white:#f2f3f4;
+  --muted:#89939d;
+  --green:#52d58a;
+  --yellow:#e7c64b;
+  --red:#ef625d;
+  --blue:#39b9e9;
+  --orange:#ef9b49;
+  --border:#3a424b;
+}
 
-        main { flex: 1; padding: 8px; overflow-y: auto; }
-        .tab-content { display: none; height: 100%; flex-direction: column; gap: 8px; }
-        .tab-content.active { display: flex; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; }
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--white);
+  font-family:-apple-system,BlinkMacSystemFont,"Arial",sans-serif;
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:calc(86px + env(safe-area-inset-bottom));
+  font-variant-numeric:tabular-nums;
+}
+button {font:inherit;color:inherit;cursor:pointer}
+header {
+  padding:18px 17px 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:rgba(23,26,30,.96);
+}
+.logo {font-size:21px;font-weight:900;letter-spacing:2px}
+.logo small {
+  display:block;
+  font-size:9px;
+  letter-spacing:3px;
+  color:var(--muted);
+  margin-top:4px;
+}
+.status {
+  font-size:10px;
+  color:var(--green);
+  border:1px solid var(--green);
+  border-radius:4px;
+  padding:7px 9px;
+  letter-spacing:1px;
+}
+main {padding:15px}
+.page {display:none}
+.page.active {display:block}
+.section-title {
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin:17px 0 10px;
+}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+.tile {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:13px;
+  min-width:0;
+  position:relative;
+}
+.tile.green {border-color:var(--green)}
+.tile.yellow {border-color:var(--yellow)}
+.tile.red {border-color:var(--red)}
+.tile.blue {border-color:var(--blue)}
+.tile.orange {border-color:var(--orange)}
+.tile-label {
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:1px;
+  font-weight:700;
+  margin-bottom:9px;
+}
+.tile-value {
+  font-size:clamp(27px,8vw,38px);
+  font-weight:800;
+  line-height:1;
+  white-space:nowrap;
+}
+.tile-unit {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:6px;
+}
+.icon {
+  font-size:19px;
+  margin-bottom:9px;
+  display:block;
+}
+.hero {
+  background:var(--panel);
+  border:1px solid var(--green);
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:10px;
+}
+.hero-top {display:flex;justify-content:space-between;align-items:center}
+.hero-speed {
+  font-size:76px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:-4px;
+}
+.hero-speed small {
+  font-size:16px;
+  letter-spacing:0;
+  color:var(--muted);
+}
+.rpmbar {
+  display:flex;
+  gap:3px;
+  margin-top:15px;
+}
+.rpmbar span {
+  height:8px;
+  flex:1;
+  background:#3b444c;
+  border-radius:2px;
+}
+.rpmbar span.on:nth-child(-n+6) {background:var(--green)}
+.rpmbar span.on:nth-child(n+7):nth-child(-n+9) {background:var(--yellow)}
+.rpmbar span.on:nth-child(n+10) {background:var(--red)}
+.subgrid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+.mini {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:11px 8px;
+  text-align:center;
+}
+.mini strong {font-size:22px;display:block}
+.mini small {font-size:9px;color:var(--muted);letter-spacing:1px}
+.menu-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+.menu-item {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:9px;
+  min-height:88px;
+  padding:12px 5px;
+  text-align:center;
+}
+.menu-item .icon {font-size:23px}
+.menu-item small {
+  font-size:9px;
+  font-weight:800;
+  letter-spacing:.5px;
+}
+button:active {transform:scale(.98)}
+.action {
+  border:1px solid var(--border);
+  background:var(--panel2);
+  border-radius:7px;
+  padding:13px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+.action.green {border-color:var(--green);color:var(--green)}
+.action.red {border-color:var(--red);color:var(--red)}
+.action.yellow {border-color:var(--yellow);color:var(--yellow)}
+.action.blue {border-color:var(--blue);color:var(--blue)}
+.actions {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin:13px 0;
+}
+.full {width:100%;margin-top:9px}
+.info {
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:13px;
+  border-radius:8px;
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.6;
+  margin:10px 0;
+}
+.info strong {color:var(--white)}
+.bigtime {
+  font-size:43px;
+  font-weight:900;
+  text-align:center;
+  padding:18px 0;
+}
+canvas {
+  width:100%;
+  height:180px;
+  background:#1e2329;
+  border:1px solid var(--border);
+  border-radius:8px;
+}
+.data-row {
+  display:flex;
+  justify-content:space-between;
+  padding:12px 2px;
+  border-bottom:1px solid var(--border);
+  font-size:12px;
+}
+.data-row span:first-child {color:var(--muted)}
+input,select {
+  width:100%;
+  background:var(--panel);
+  border:1px solid var(--border);
+  color:var(--white);
+  border-radius:7px;
+  padding:12px;
+  margin-top:7px;
+}
+nav {
+  position:fixed;
+  z-index:10;
+  bottom:0;
+  left:0;
+  right:0;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  padding:9px 4px calc(9px + env(safe-area-inset-bottom));
+  background:#20242a;
+  border-top:1px solid var(--border);
+}
+nav button {
+  background:none;
+  border:0;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  padding:5px 1px;
+}
+nav button span {display:block;font-size:20px;margin-bottom:5px}
+nav button.active {color:var(--green)}
+.record-dot {
+  display:inline-block;
+  width:8px;height:8px;
+  background:var(--red);
+  border-radius:50%;
+  margin-right:6px;
+}
+.session {
+  padding:13px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:8px;
+  margin:9px 0;
+}
+.session strong {font-size:14px}
+.session small {display:block;color:var(--muted);margin-top:5px}
+.hidden {display:none!important}
+footer {
+  text-align:center;
+  color:#626d77;
+  font-size:9px;
+  padding:25px 0;
+}
+</style>
+</head>
 
-        .card {
-            background: var(--box-bg); border: 1px solid var(--box-border);
-            border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between;
-        }
-        .card-full { grid-column: span 2; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; }
-        .card-title { font-size: 9px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+<body>
 
-        .card-body { display: flex; align-items: baseline; justify-content: center; gap: 4px; margin: 2px 0; }
-        .value { font-size: 38px; font-weight: 900; font-family: monospace; color: #ffffff; letter-spacing: -1px; }
-        .unit { font-size: 10px; font-weight: 800; color: var(--text-muted); }
+<header>
+  <div class="logo">R7 SYSTEM<small>RENAULT CLIO V · PERFORMANCE</small></div>
+  <div class="status" id="connection">SIMULATION</div>
+</header>
 
-        /* Shift Lights */
-        .shift-lights { display: flex; gap: 3px; margin-top: 4px; width: 100%; }
-        .shift-led { flex: 1; height: 8px; background: #131722; border-radius: 2px; }
-        .shift-led.green.on { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
-        .shift-led.yellow.on { background: var(--accent-yellow); box-shadow: 0 0 8px var(--accent-yellow); }
-        .shift-led.red.on { background: var(--accent-red); box-shadow: 0 0 10px var(--accent-red); }
-        .shift-led.blink { background: #fff !important; box-shadow: 0 0 14px #fff !important; }
+<main>
 
-        /* PANEL KEYPAD TIPO PEUGEOT RALLY4 */
-        .keypad-panel {
-            background: #11141a; border: 3px solid #222834; border-radius: 12px;
-            padding: 12px; display: grid; grid-template-columns: 50px 1fr 1fr 50px; gap: 10px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 25px rgba(0,0,0,0.6);
-            align-items: center;
-        }
-        .keypad-side { display: flex; flex-direction: column; gap: 8px; }
-        .keypad-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+<!-- MAIN -->
+<section class="page active" id="main">
+  <div class="section-title">01 / VEHICLE STATUS</div>
 
-        .r-btn {
-            background: #181d28; border: 2px solid #2d3546; border-radius: 8px;
-            height: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            gap: 4px; cursor: pointer; transition: all 0.1s; position: relative;
-        }
-        .r-btn:active, .r-btn.active {
-            transform: scale(0.96); filter: brightness(1.3);
-        }
-        .r-btn-icon { width: 18px; height: 18px; fill: currentColor; }
-        .r-btn-label { font-size: 7px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
+  <div class="hero">
+    <div class="hero-top">
+      <span class="tile-label">VEHICLE SPEED</span>
+      <span style="color:var(--green);font-size:10px" id="source">SIM DATA</span>
+    </div>
+    <div class="hero-speed"><span id="speed">0</span><small> KM/H</small></div>
+    <div class="tile-label">ENGINE RPM</div>
+    <div class="tile-value" id="rpm">850</div>
+    <div class="rpmbar" id="rpmbar"></div>
+  </div>
 
-        /* Colores de los marcos retroiluminados como en el coche de carreras */
-        .r-btn.red { border-color: var(--accent-red); color: var(--accent-red); box-shadow: 0 0 8px rgba(255,30,56,0.2); }
-        .r-btn.red.active { background: rgba(255,30,56,0.2); box-shadow: 0 0 15px var(--accent-red); }
+  <div class="subgrid">
+    <div class="mini"><strong id="gear">N</strong><small>GEAR</small></div>
+    <div class="mini"><strong id="throttle">0</strong><small>THROTTLE %</small></div>
+    <div class="mini"><strong id="load">18</strong><small>LOAD %</small></div>
+  </div>
 
-        .r-btn.green { border-color: var(--accent-green); color: var(--accent-green); box-shadow: 0 0 8px rgba(0,255,102,0.2); }
-        .r-btn.green.active { background: rgba(0,255,102,0.2); box-shadow: 0 0 15px var(--accent-green); }
+  <div class="section-title">02 / LIVE PARAMETERS</div>
+  <div class="grid">
+    <div class="tile green">
+      <span class="icon">🌡</span>
+      <div class="tile-label">COOLANT</div>
+      <div class="tile-value"><span id="coolant">88</span>°</div>
+      <div class="tile-unit">ENGINE TEMP.</div>
+    </div>
+    <div class="tile yellow">
+      <span class="icon">♨</span>
+      <div class="tile-label">INTAKE AIR</div>
+      <div class="tile-value"><span id="iat">25</span>°</div>
+      <div class="tile-unit">AIR TEMP.</div>
+    </div>
+    <div class="tile blue">
+      <span class="icon">◉</span>
+      <div class="tile-label">BOOST</div>
+      <div class="tile-value"><span id="boost">0.2</span></div>
+      <div class="tile-unit">BAR · SIMULATED</div>
+    </div>
+    <div class="tile green">
+      <span class="icon">ϟ</span>
+      <div class="tile-label">BATTERY</div>
+      <div class="tile-value"><span id="voltage">14.2</span></div>
+      <div class="tile-unit">VOLTS</div>
+    </div>
+  </div>
 
-        .r-btn.yellow { border-color: var(--accent-yellow); color: var(--accent-yellow); box-shadow: 0 0 8px rgba(255,183,0,0.2); }
-        .r-btn.yellow.active { background: rgba(255,183,0,0.2); box-shadow: 0 0 15px var(--accent-yellow); }
+  <div class="section-title">03 / QUICK ACCESS</div>
+  <div class="menu-grid">
+    <button class="menu-item" onclick="showPage('engine')"><span class="icon">🌡</span><small>ENGINE</small></button>
+    <button class="menu-item" onclick="showPage('pressure')"><span class="icon">◉</span><small>PRESSURE</small></button>
+    <button class="menu-item" onclick="showPage('gforce')"><span class="icon">⌖</span><small>G-FORCE</small></button>
+    <button class="menu-item" onclick="showPage('telemetry')"><span class="icon">⏺</span><small>RECORD</small></button>
+    <button class="menu-item" onclick="showPage('analysis')"><span class="icon">▥</span><small>ANALYSIS</small></button>
+    <button class="menu-item" onclick="showPage('diagnostics')"><span class="icon">⚙</span><small>DIAG</small></button>
+  </div>
+</section>
 
-        .r-btn.cyan { border-color: var(--accent-cyan); color: var(--accent-cyan); box-shadow: 0 0 8px rgba(0,240,255,0.2); }
-        .r-btn.cyan.active { background: rgba(0,240,255,0.2); box-shadow: 0 0 15px var(--accent-cyan); }
+<!-- ENGINE -->
+<section class="page" id="engine">
+  <div class="section-title">02 / ENGINE MONITORING</div>
+  <div class="grid">
+    <div class="tile green"><div class="tile-label">COOLANT TEMP.</div><div class="tile-value"><span id="eCoolant">88</span>°</div><div class="tile-unit">°C</div></div>
+    <div class="tile yellow"><div class="tile-label">INTAKE TEMP.</div><div class="tile-value"><span id="eIat">25</span>°</div><div class="tile-unit">°C</div></div>
+    <div class="tile blue"><div class="tile-label">BOOST PRESSURE</div><div class="tile-value"><span id="eBoost">0.2</span></div><div class="tile-unit">BAR · SIMULATED</div></div>
+    <div class="tile green"><div class="tile-label">VOLTAGE</div><div class="tile-value"><span id="eVolt">14.2</span></div><div class="tile-unit">V</div></div>
+    <div class="tile"><div class="tile-label">ENGINE LOAD</div><div class="tile-value"><span id="eLoad">18</span>%</div><div class="tile-unit">CALCULATED PID</div></div>
+    <div class="tile"><div class="tile-label">THROTTLE</div><div class="tile-value"><span id="eThrottle">0</span>%</div><div class="tile-unit">POSITION</div></div>
+  </div>
+  <div class="section-title">ENGINE HEALTH</div>
+  <div id="health" class="info">Esperando datos...</div>
+  <div class="info">La temperatura de aceite y otros parámetros específicos requieren sensores o PID compatibles. No se sustituirán por valores inventados.</div>
+</section>
 
-        .r-btn.blue { border-color: var(--accent-blue);
+<!-- PRESSURE -->
+<section class="page" id="pressure">
+  <div class="section-title">03 / PRESSURE MONITOR</div>
+  <div class="grid">
+    <div class="tile blue"><div class="tile-label">BOOST</div><div class="tile-value"><span id="pBoost">0.2</span></div><div class="tile-unit">BAR · SIMULATED</div></div>
+    <div class="tile"><div class="tile-label">ATMOSPHERIC</div><div class="tile-value"><span id="atmos">1.01</span></div><div class="tile-unit">BAR</div></div>
+    <div class="tile yellow"><div class="tile-label">INTAKE PRESSURE</div><div class="tile-value"><span id="map">1.2</span></div><div class="tile-unit">BAR ABSOLUTE</div></div>
+    <div class="tile"><div class="tile-label">FUEL PRESSURE</div><div class="tile-value">---</div><div class="tile-unit">SENSOR NOT AVAILABLE</div></div>
+  </div>
+  <div class="info">La presión de sobrealimentación mostrada en simulación no representa una medición del turbo. La presión real se calculará a partir de MAP y presión atmosférica, si ambos PID están disponibles.</div>
+</section>
+
+<!-- G FORCE -->
+<section class="page" id="gforce">
+  <div class="section-title">04 / G-FORCE MONITOR</div>
+  <div class="grid">
+    <div class="tile blue"><div class="tile-label">LONGITUDINAL</div><div class="tile-value" id="gx">0.00</div><div class="tile-unit">G</div></div>
+    <div class="tile green"><div class="tile-label">LATERAL</div><div class="tile-value" id="gy">0.00</div><div class="tile-unit">G</div></div>
+    <div class="tile yellow"><div class="tile-label">MAXIMUM G</div><div class="tile-value" id="gmax">0.00</div><div class="tile-unit">G</div></div>
+    <div class="tile"><div class="tile-label">GPS SPEED</div><div class="tile-value" id="gpsSpeed">---</div><div class="tile-unit">KM/H</div></div>
+  </div>
+  <div class="section-title">ACCELERATION VECTOR</div>
+  <canvas id="gcanvas" width="600" height="350"></canvas>
+  <div class="actions">
+    <button class="action blue" onclick="enableMotion()">ENABLE SENSOR</button>
+    <button class="action" onclick="resetG()">RESET G</button>
+    <button class="action" onclick="startGPS()">GPS ON</button>
+  </div>
+  <div class="info" id="motionStatus">Los sensores del iPhone requieren permiso del usuario. Las fuerzas G se calcularán con los datos disponibles y su orientación deberá calibrarse.</div>
+</section>
+
+<!-- TELEMETRY -->
+<section class="page" id="telemetry">
+  <div class="section-title">05 / STAGE RECORDING</div>
+  <div class="tile">
+    <div class="tile-label">CURRENT SESSION</div>
+    <div class="bigtime" id="timer">00:00.000</div>
+    <div style="text-align:center;color:var(--muted);font-size:10px" id="recordStatus">SYSTEM READY</div>
+  </div>
+  <div class="actions">
+    <button class="action green" onclick="startRecord()">START</button>
+    <button class="action yellow" onclick="pauseRecord()">PAUSE</button>
+    <button class="action red" onclick="stopRecord()">STOP</button>
+  </div>
+  <div class="grid">
+    <div class="tile"><div class="tile-label">DISTANCE</div><div class="tile-value" id="distance">0.00</div><div class="tile-unit">KM · GPS</div></div>
+    <div class="tile"><div class="tile-label">SAMPLES</div><div class="tile-value" id="samples">0</div><div class="tile-unit">DATA POINTS</div></div>
+  </div>
+  <div class="section-title">SESSION CONFIGURATION</div>
+  <input id="stageName" placeholder="Nombre del tramo (ej. EUGUI)">
+  <button class="action blue full" onclick="saveSessionName()">SET SESSION NAME</button>
+  <div class="info">Se recomienda iniciar la grabación con el vehículo detenido. No manipules el móvil mientras conduces. La grabación puede interrumpirse si iOS suspende Safari en segundo plano.</div>
+</section>
+
+<!-- ANALYSIS -->
+<section class="page" id="analysis">
+  <div class="section-title">06 / TELEMETRY ANALYSIS</div>
+  <div id="sessionList"></div>
+  <div class="section-title">SESSION PLAYBACK</div>
+  <select id="channel" onchange="drawAnalysis()">
+    <option value="speed">VELOCITY · KM/H</option>
+    <option value="rpm">ENGINE RPM</option>
+    <option value="throttle">THROTTLE · %</option>
+    <option value="coolant">COOLANT · °C</option>
+    <option value="boost">BOOST · BAR</option>
+    <option value="gx">LONGITUDINAL G</option>
+    <option value="gy">LATERAL G</option>
+  </select>
+  <canvas id="chart" width="600" height="350"></canvas>
+  <div class="data-row"><span>SESSION TIME</span><strong id="aTime">---</strong></div>
+  <div class="data-row"><span>MAXIMUM SPEED</span><strong id="aMax">---</strong></div>
+  <div class="data-row"><span>MAXIMUM RPM</span><strong id="aRPM">---</strong></div>
+  <div class="data-row"><span>AVERAGE SPEED</span><strong id="aAvg">---</strong></div>
+  <div class="actions">
+    <button class="action blue" onclick="exportSelected()">EXPORT CSV</button>
+    <button class="action" onclick="drawAnalysis()">REFRESH</button>
+    <button class="action red" onclick="deleteSelected()">DELETE</button>
+  </div>
+  <div class="info">Selecciona una sesión de la lista para analizarla. Los gráficos representan los puntos registrados, no una reconstrucción de datos ausentes.</div>
+</section>
+
+<!-- DIAGNOSTICS -->
+<section class="page" id="diagnostics">
+  <div class="section-title">07 / ECU DIAGNOSTICS</div>
+  <div class="tile">
+    <div class="tile-label">OBD CONNECTION</div>
+    <div class="tile-value" style="font-size:22px" id="obdState">NOT CONNECTED</div>
+    <div class="tile-unit">NO LIVE ECU DATA</div>
+  </div>
+  <div class="section-title">AVAILABLE FUNCTIONS</div>
+  <div class="grid">
+    <div class="tile"><div class="icon">⚙</div><div class="tile-label">DTC CODES</div><div class="tile-value">---</div><div class="tile-unit">NOT CONNECTED</div></div>
+    <div class="tile"><div class="icon">◉</div><div class="tile-label">LIVE PIDS</div><div class="tile-value">---</div><div class="tile-unit">NOT CONNECTED</div></div>
+    <div class="tile"><div class="icon">ϟ</div><div class="tile-label">ECU VOLTAGE</div><div class="tile-value">---</div><div class="tile-unit">NOT CONNECTED</div></div>
+    <div class="tile"><div class="icon">✓</div><div class="tile-label">READINESS</div><div class="tile-value">---</div><div class="tile-unit">NOT CONNECTED</div></div>
+  </div>
+  <div class="info"><strong>OBD INTERFACE NOT IMPLEMENTED</strong><br>El módulo de diagnosis está preparado visualmente. Requiere seleccionar el adaptador y desarrollar su protocolo de comunicación. No se simulan códigos de avería.</div>
+</section>
+
+<!-- SETTINGS -->
+<section class="page" id="settings">
+  <div class="section-title">08 / SYSTEM SETTINGS</div>
+  <div class="data-row"><span>VEHICLE</span><strong>RENAULT CLIO V</strong></div>
+  <div class="data-row"><span>ENGINE</span><strong>1.3 TCe</strong></div>
+  <div class="data-row"><span>APP VERSION</span><strong>1.0.0</strong></div>
+  <div class="data-row"><span>DATA STORAGE</span><strong>INDEXEDDB</strong></div>
+  <div class="section-title">SIMULATION SETTINGS</div>
+  <label class="tile-label">SIMULATION SPEED</label>
+  <select id="simSpeed">
+    <option value="1">NORMAL</option>
+    <option value="2">FAST</option>
+    <option value="0.5">SLOW</option>
+  </select>
+  <button class="action blue full" onclick="toggleSimulation()">TOGGLE SIMULATION</button>
+  <div class="section-title">DATA MANAGEMENT</div>
+  <button class="action blue full" onclick="exportAll()">EXPORT ALL SESSIONS</button>
+  <button class="action full" onclick="document.getElementById('csvImport').click()">IMPORT CSV</button>
+  <input type="file" id="csvImport" accept=".csv,text/csv" class="hidden" onchange="importCSV(event)">
+  <button class="action full" onclick="requestMotionFromSettings()">SENSOR PERMISSIONS</button>
+  <div class="info">Las sesiones se almacenan localmente en este navegador. Exporta copias periódicas para evitar perder los registros si se borran los datos del sitio o se elimina la aplicación.</div>
+</section>
+
+</main>
+
+<nav>
+  <button class="active" onclick="showPage('main',this)"><span>▦</span>MAIN</button>
+  <button onclick="showPage('engine',this)"><span>🌡</span>ENGINE</button>
+  <button onclick="showPage('gforce',this)"><span>⌖</span>G-FORCE</button>
+  <button onclick="showPage('telemetry',this)"><span>⏺</span>RECORD</button>
+  <button onclick="showPage('analysis',this)"><span>▥</span>ANALYSIS</button>
+</nav>
+
+<script>
+"use strict";
+
+/* R7 SYSTEM CORE */
+
+const $ = id => document.getElementById(id);
+
+let simEnabled = true;
+let simTime = 0;
+let current = {};
+let history = [];
+let sessions = [];
+let selectedSession = null;
+
+let recording = false;
+let paused = false;
+let recordStart = 0;
+let pauseStart = 0;
+let pausedTotal = 0;
+let sessionData = [];
+let sessionName = "R7 STAGE";
+let recordTimer = null;
+let gpsWatch = null;
+let gpsPosition = null;
+let lastGPS = null;
+let distanceKm = 0;
+let motionEnabled = false;
+let gMax = 0;
+let motionX = 0;
+let motionY = 0;
+
+/* INDEXED DB */
+
+const DB_NAME = "R7_SYSTEM_DB";
+let db;
+
+function openDB() {
+  return new Promise((resolve,reject)=>{
+    if (!window.indexedDB) {
+      reject(new Error("IndexedDB no disponible"));
+      return;
+    }
+    const req = indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded = e => {
+      e.target.result.createObjectStore("sessions",{keyPath:"id"});
+    };
+    req.onsuccess = e => {
+      db=e.target.result;
+      resolve(db);
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+async function storeSession(session) {
+  const database = db || await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=database.transaction("sessions","readwrite");
+    tx.objectStore("sessions").put(session);
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+
+async function loadSessions() {
+  try {
+    const database = db || await openDB();
+    sessions = await new Promise((resolve,reject)=>{
+      const req=database.transaction("sessions","readonly")
+        .objectStore("sessions").getAll();
+      req.onsuccess=()=>resolve(req.result||[]);
+      req.onerror=()=>reject(req.error);
+    });
+    sessions.sort((a,b)=>b.created-a.created);
+    renderSessions();
+  } catch(e) {
+    console.error(e);
+    $("sessionList").textContent="Error leyendo almacenamiento local.";
+  }
+}
+
+async function deleteSession(id) {
+  const database = db || await openDB();
+  return new Promise((resolve,reject)=>{
+    const tx=database.transaction("sessions","readwrite");
+    tx.objectStore("sessions").delete(id);
+    tx.oncomplete=resolve;
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+
+/* NAVIGATION */
+
+function showPage(id,button) {
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  $(id).classList.add("active");
+  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
+  if(button) button.classList.add("active");
+  else {
+    const map={main:0,engine:1,gforce:2,telemetry:3,analysis:4};
+    const index=map[id];
+    if(index!==undefined) document.querySelectorAll("nav button")[index].classList.add("active");
+  }
+  if(id==="analysis") drawAnalysis();
+}
+
+/* SIMULATION ENGINE */
+
+function simulationData() {
+  simTime += 0.25 * Number($("simSpeed").value || 1);
+
+  const speed = Math.max(0,Math.round(72+65*Math.sin(simTime/7)+20*Math.sin(simTime/2.7)));
+  const rpm = Math.round(1100 + speed*42 + 700*Math.sin(simTime/3));
+  const throttle = Math.max(0,Math.min(100,Math.round(35+45*Math.sin(simTime/4))));
+  const coolant = 88+Math.round(3*Math.sin(simTime/19));
+  const iat = 25+Math.round(5*Math.sin(simTime/10));
+  const boost = Math.max(-0.3,Math.min(1.3,(throttle/100)*1.3-0.35));
+  const voltage = 14.1+0.2*Math.sin(simTime/20);
+  const gx = 0.45*Math.sin(simTime/3);
+  const gy = 0.7*Math.sin(simTime/4.5);
+  const gear = speed<5?"1":String(Math.min(6,Math.max(1,Math.floor(rpm/1150))));
+
+  return {
+    timestamp:Date.now(),
+    speed,rpm,throttle,
+    load:Math.round(throttle*.7+10),
+    gear,coolant,iat,
+    boost:Number(boost.toFixed(2)),
+    map:Number((1.01+boost).toFixed(2)),
+    atmos:1.01,
+    voltage:Number(voltage.toFixed(2)),
+    gx:Number(gx.toFixed(3)),
+    gy:Number(gy.toFixed(3)),
+    source:"SIM"
+  };
+}
+
+/* UI UPDATE */
+
+function put(id,value) {
+  const el=$(id);
+  if(el) el.textContent=value;
+}
+
+function updateUI(d) {
+  put("speed",d.speed);
+  put("rpm",d.rpm);
+  put("gear",d.gear);
+  put("throttle",d.throttle);
+  put("load",d.load);
+  put("coolant",d.coolant);
+  put("iat",d.iat);
+  put("boost",d.boost.toFixed(2));
+  put("voltage",d.voltage.toFixed(2));
+
+  put("eCoolant",d.coolant);
+  put("eIat",d.iat);
+  put("eBoost",d.boost.toFixed(2));
+  put("eVolt",d.voltage.toFixed(2));
+  put("eLoad",d.load);
+  put("eThrottle",d.throttle);
+  put("pBoost",d.boost.toFixed(2));
+  put("atmos",d.atmos.toFixed(2));
+  put("map",d.map.toFixed(2));
+
+  if(d.source==="SIM") {
+    $("source").textContent="SIM DATA";
+    $("connection").textContent="SIMULATION";
+  }
+
+  const bars=$("rpmbar");
+  if(!bars.children.length) {
+    for(let i=0;i<12;i++) bars.appendChild(document.createElement("span"));
+  }
+  const level=Math.min(12,Math.floor(d.rpm/600));
+  [...bars.children].forEach((el,i)=>el.classList.toggle("on",i<level));
+
+  const health=[];
+  if(d.coolant>105) health.push("Temperatura de refrigerante elevada");
+  if(d.voltage<12) health.push("Voltaje bajo");
+  if(!health.length) health.push("Sin alertas en los parámetros simulados");
+  $("health").textContent=health.join(" · ");
+
+  if(!motionEnabled) {
+    put("gx",d.gx.toFixed(2));
+    put("gy",d.gy.toFixed(2));
+    gMax=Math.max(gMax,Math.hypot(d.gx,d.gy));
+    put("gmax",gMax.toFixed(2));
+    drawG(d.gx,d.gy);
+  }
+
+  current=d;
+  history.push(d);
+  if(history.length>180) history.shift();
+
+  if(recording && !paused) {
+    const point={
+      ...d,
+      gpsLat:gpsPosition?.lat ?? "",
+      gpsLon:gpsPosition?.lon ?? "",
+      gpsAccuracy:gpsPosition?.accuracy ?? "",
+      distanceKm:Number(distanceKm.toFixed(5))
+    };
+    sessionData.push(point);
+    put("samples",sessionData.length);
+  }
+}
+
+/* G-FORCE */
+
+function drawG(x,y) {
+  const c=$("gcanvas");
+  if(!c) return;
+  const ctx=c.getContext("2d");
+  const w=c.width,h=c.height;
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle="#46515b";
+  ctx.lineWidth=2;
+  ctx.beginPath();
+  ctx.moveTo(w/2,0);ctx.lineTo(w/2,h);
+  ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(w/2,h/2,100,0,Math.PI*2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(w/2,h/2,50,0,Math.PI*2);
+  ctx.stroke();
+  ctx.fillStyle="#39b9e9";
+  ctx.beginPath();
+  ctx.arc(w/2+y*110,h/2-x*110,11,0,Math.PI*2);
+  ctx.fill();
+}
+
+function resetG() {
+  gMax=0;
+  put("gmax","0.00");
+}
+
+/* MOTION SENSOR */
+
+async function enableMotion() {
+  try {
+    if(typeof DeviceMotionEvent==="undefined") {
+      throw new Error("Sensor no disponible");
+    }
+    if(typeof DeviceMotionEvent.requestPermission==="function") {
+      const permission=await DeviceMotionEvent.requestPermission();
+      if(permission!=="granted") throw new Error("Permiso denegado");
+    }
+    window.addEventListener("devicemotion",onMotion);
+    motionEnabled=true;
+    $("motionStatus").textContent="SENSOR ACTIVO. Mantén una orientación fija del teléfono y calibra antes de utilizar los datos.";
+  } catch(e) {
+    $("motionStatus").textContent="No se pudo activar el sensor: "+e.message;
+  }
+}
+
+function onMotion(e) {
+  const a=e.accelerationIncludingGravity || e.acceleration;
+  if(!a) return;
+  if(a.x===null || a.y===null) return;
+
+  // Valores provisionales: orientación del teléfono pendiente de calibración.
+  motionX=(a.x||0)/9.80665;
+  motionY=(a.y||0)/9.80665;
+
+  put("gx",motionX.toFixed(2));
+  put("gy",motionY.toFixed(2));
+
+  gMax=Math.max(gMax,Math.hypot(motionX,motionY));
+  put("gmax",gMax.toFixed(2));
+  drawG(motionX,motionY);
+}
+
+/* GPS */
+
+function startGPS() {
+  if(!navigator.geolocation) {
+    alert("GPS no disponible");
+    return;
+  }
+  if(gpsWatch!==null) {
+    navigator.geolocation.clearWatch(gpsWatch);
+    gpsWatch=null;
+    $("motionStatus").textContent="GPS DESACTIVADO";
+    return;
+  }
+  gpsWatch=navigator.geolocation.watchPosition(position=>{
+    const c=position.coords;
+    gpsPosition={
+      lat:c.latitude,
+      lon:c.longitude,
+      accuracy:c.accuracy,
+      speed:c.speed
+    };
+    if(c.speed!==null) put("gpsSpeed",Math.round(c.speed*3.6));
+
+    if(recording && !paused && lastGPS) {
+      const delta=haversine(lastGPS.lat,lastGPS.lon,c.latitude,c.longitude);
+      if(delta<0.1) distanceKm+=delta;
+      put("distance",distanceKm.toFixed(2));
+    }
+    lastGPS={lat:c.latitude,lon:c.longitude};
+    $("motionStatus").textContent="GPS ACTIVO · PRECISIÓN "+Math.round(c.accuracy)+" M";
+  },err=>{
+    $("motionStatus").textContent="Error GPS: "+err.message;
+  },{enableHighAccuracy:true,maximumAge:500,timeout:15000});
+}
+
+function haversine(lat1,lon1,lat2,lon2) {
+  const R=6371;
+  const rad=x=>x*Math.PI/180;
+  const a=Math.sin(rad(lat2-lat1)/2)**2+
+    Math.cos(rad(lat1))*Math.cos(rad(lat2))*
+    Math.sin(rad(lon2-lon1)/2)**2;
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+
+/* RECORDING */
+
+function startRecord() {
+  if(recording && paused) {
+    pausedTotal+=Date.now()-pauseStart;
+    paused=false;
+    $("recordStatus").textContent="RECORDING";
+    return;
+  }
+  if(recording) return;
+
+  recording=true;
+  paused=false;
+  sessionData=[];
+  distanceKm=0;
+  lastGPS=null;
+  recordStart=Date.now();
+  pausedTotal=0;
+
+  sessionName=$("stageName").value.trim() || "R7 STAGE";
+  $("recordStatus").textContent="RECORDING";
+  $("samples").textContent="0";
+  $("distance").textContent="0.00";
+  recordTimer=setInterval(updateTimer,50);
+}
+
+function pauseRecord() {
+  if(!recording || paused) return;
+  paused=true;
+  pauseStart=Date.now();
+  $("recordStatus").textContent="PAUSED";
+}
+
+function updateTimer() {
+  if(!recording || paused) return;
+  const ms=Date.now()-recordStart-pausedTotal;
+  $("timer").textContent=formatTime(ms);
+}
+
+function formatTime(ms) {
+  const min=Math.floor(ms/60000);
+  const sec=Math.floor((ms%60000)/1000);
+  const milli=ms%1000;
+  return String(min).padStart(2,"0")+":"+
+    String(sec).padStart(2,"0")+"."+
+    String(milli).padStart(3,"0");
+}
+
+async function stopRecord() {
+  if(!recording) return;
+  const end=Date.now();
+  const duration=end-recordStart-pausedTotal-
+    (paused?end-pauseStart:0);
+
+  recording=false;
+  paused=false;
+  clearInterval(recordTimer);
+
+  if(!sessionData.length) {
+    $("recordStatus").textContent="EMPTY SESSION";
+    return;
+  }
+
+  const session={
+    id:"R7-"+end,
+    name:sessionName,
+    created:end,
+    duration,
+    distance:distanceKm,
+    samples:sessionData
+  };
+
+  try {
+    await storeSession(session);
+    $("recordStatus").textContent="SESSION SAVED";
+    await loadSessions();
+    selectedSession=session;
+    $("timer").textContent=formatTime(duration);
+  } catch(e) {
+    $("recordStatus").textContent="STORAGE ERROR";
+    alert("No se pudo guardar la sesión: "+e.message);
+  }
+}
+
+function saveSessionName() {
+  sessionName=$("stageName").value.trim() || "R7 STAGE";
+  alert("Nombre configurado: "+sessionName);
+}
+
+/* CSV EXPORT */
+
+const columns=[
+  "timestamp","speed","rpm","gear","throttle","load",
+  "coolant","iat","boost","map","atmos","voltage",
+  "gx","gy","gpsLat","gpsLon","gpsAccuracy","distanceKm","source"
+];
+
+function csvEscape(v) {
+  if(v===null || v===undefined) return "";
+  const s=String(v);
+  return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;
+}
+
+function toCSV(data) {
+  return [
+    columns.join(","),
+    ...data.map(row=>columns.map(k=>csvEscape(row[k])).join(","))
+  ].join("\r\n");
+}
+
+function downloadFile(content,filename,type) {
+  const blob=new Blob([content],{type});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+
+function exportSelected() {
+  if(!selectedSession) {
+    alert("Selecciona primero una sesión");
+    return;
+  }
+  const safe=selectedSession.name.replace(/[^a-z0-9-_]/gi,"_");
+  downloadFile(toCSV(selectedSession.samples),
+    safe+".csv","text/csv;charset=utf-8");
+}
+
+async function exportAll() {
+  if(!sessions.length) await loadSessions();
+  if(!sessions.length) {
+    alert("No hay sesiones guardadas");
+    return;
+  }
+  const content=JSON.stringify(sessions,null,2);
+  downloadFile(content,"R7_ALL_SESSIONS.json","application/json");
+}
+
+/* IMPORT CSV */
+
+async function importCSV(event) {
+  const file=event.target.files[0];
+  if(!file) return;
+
+  try {
+    const text=await file.text();
+    const lines=text.trim().split(/\r?\n/);
+    const headers=parseCSVLine(lines[0]);
+    const samples=lines.slice(1).filter(Boolean).map(line=>{
+      const values=parseCSVLine(line);
+      const row={};
+      headers.forEach((h,i)=>{
+        const v=values[i]??"";
+        row[h]=v===""?"":(isNaN(Number(v))?v:Number(v));
+      });
+      return row;
+    });
+
+    const now=Date.now();
+    const session={
+      id:"R7-IMPORT-"+now,
+      name:file.name.replace(/\.csv$/i,""),
+      created:now,
+      duration:samples.length?
+        Number(samples[samples.length-1].timestamp)-Number(samples[0].timestamp):0,
+      distance:0,
+      samples
+    };
+    await storeSession(session);
+    await loadSessions();
+    alert("CSV importado: "+samples.length+" registros");
+  } catch(e) {
+    alert("Error importando CSV: "+e.message);
+  }
+  event.target.value="";
+}
+
+function parseCSVLine(line) {
+  const out=[];
+  let current="",quoted=false;
+  for(let i=0;i<line.length;i++) {
+    const ch=line[i];
+    if(ch==='"' && line[i+1]==='"' && quoted) {
+      current+='"';i++;
+    } else if(ch==='"') {
+      quoted=!quoted;
+    } else if(ch==="," && !quoted) {
+      out.push(current);current="";
+    } else current+=ch;
+  }
+  out.push(current);
+  return out;
+}
+
+/* SESSION ANALYSIS */
+
+function renderSessions() {
+  const list=$("sessionList");
+  list.innerHTML="";
+  if(!sessions.length) {
+    list.textContent="No hay sesiones registradas.";
+    return;
+  }
+
+  sessions.forEach(session=>{
+    const div=document.createElement("div");
+    div.className="session";
+    const date=new Date(session.created).toLocaleString();
+    const title=document.createElement("strong");
+    title.textContent=session.name;
+    const details=document.createElement("small");
+    details.textContent=date+" · "+session.samples.length+" muestras · "+
+      formatTime(session.duration);
+    const select=document.createElement("button");
+    select.className="action blue full";
+    select.textContent="OPEN SESSION";
+    select.onclick=()=>{
+      selectedSession=session;
+      drawAnalysis();
+    };
+    div.append(title,details,select);
+    list.appendChild(div);
+  });
+}
+
+function drawAnalysis() {
+  if(!selectedSession) {
+    if(sessions.length) selectedSession=sessions[0];
+    else return;
+  }
+  const data=selectedSession.samples||[];
+  if(!data.length) return;
+
+  const key=$("channel").value;
+  drawLineChart($("chart"),data,key);
+
+  const speeds=data.map(x=>Number(x.speed)||0);
+  const rpms=data.map(x=>Number(x.rpm)||0);
+  const average=speeds.reduce((a,b)=>a+b,0)/speeds.length;
+
+  put("aTime",formatTime(selectedSession.duration||0));
+  put("aMax",Math.max(...speeds).toFixed(0)+" km/h");
+  put("aRPM",Math.max(...rpms).toFixed(0));
+  put("aAvg",average.toFixed(1)+" km/h");
+}
+
+function drawLineChart(canvas,data,key) {
+  const ctx=canvas.getContext("2d");
+  const w=canvas.width,h=canvas.height;
+  ctx.clearRect(0,0,w,h);
+
+  ctx.strokeStyle="#39434d";
+  ctx.lineWidth=1;
+  for(let i=1;i<5;i++) {
+    ctx.beginPath();
+    ctx.moveTo(0,h*i/5);
+    ctx.lineTo(w,h*i/5);
+    ctx.stroke();
+  }
+
+  const values=data.map(x=>Number(x[key])).filter(Number.isFinite);
+  if(!values.length) return;
+
+  let min=Math.min(...values),max=Math.max(...values);
+  if(max===min) max=min+1;
+  const pad=25;
+
+  ctx.strokeStyle="#39b9e9";
+  ctx.lineWidth=3;
+  ctx.beginPath();
+
+  values.forEach((v,i)=>{
+    const x=pad+i/(Math.max(1,values.length-1))*(w-pad*2);
+    const y=h-pad-(v-min)/(max-min)*(h-pad*2);
+    if(i===0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  ctx.fillStyle="#dce2e7";
+  ctx.font="16px Arial";
+  ctx.fillText(max.toFixed(1),10,20);
+  ctx.fillText(min.toFixed(1),10,h-8);
+}
+
+async function deleteSelected() {
+  if(!selectedSession) {
+    alert("Selecciona una sesión");
+    return;
+  }
+  if(!confirm("¿Eliminar esta sesión permanentemente?")) return;
+  await deleteSession(selectedSession.id);
+  selectedSession=null;
+  await loadSessions();
+  drawAnalysis();
+}
+
+/* SIMULATION CONTROL */
+
+function toggleSimulation() {
+  simEnabled=!simEnabled;
+  $("source").textContent=simEnabled?"SIM DATA":"SIM STOPPED";
+  $("connection").textContent=simEnabled?"SIMULATION":"STOPPED";
+}
+
+/* SENSOR SETTINGS */
+
+function requestMotionFromSettings() {
+  enableMotion();
+}
+
+/* MAIN LOOP */
+
+setInterval(()=>{
+  if(simEnabled) {
+    const data=simulationData();
+    updateUI(data);
+  }
+},250);
+
+/* INITIALIZATION */
+
+async function init() {
+  try {
+    await openDB();
+    await loadSessions();
+    $("connection").textContent="SIMULATION";
+  } catch(e) {
+    $("connection").textContent="STORAGE ERROR";
+    $("sessionList").textContent="IndexedDB no disponible: "+e.message;
+  }
+  drawG(0,0);
+  put("timer","00:00.000");
+}
+
+init();
+
+</script>
+</body>
+</html>
