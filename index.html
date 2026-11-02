@@ -57,7 +57,7 @@ html, body {
 #global-alarm h1 { font-size: 28px; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; }
 #global-alarm p { font-size: 15px; font-weight: 800; letter-spacing: 1px; }
 
-/* LA BOTONERA 208 RALLY (FORZADA EN HORIZONTAL ÓPTIMA) */
+/* LA BOTONERA 208 RALLY */
 .rally-plate {
   width: 95%; max-width: 620px; height: 85%; max-height: 340px;
   background: var(--panel-case); border: 4px solid #1a1e26; border-radius: 18px;
@@ -305,22 +305,17 @@ function actionFeedback(freq = 650) {
   playBeep(freq, 0.05);
 }
 
-/* GESTIÓN BLUETOOTH OBD2 ROBUSTA */
+/* CONEXIÓN BLUETOOTH OBD2 DIRECTA PARA iOS */
 let bluetoothDevice = null;
 let bluetoothServer = null;
 
 async function connectOBD2() {
   actionFeedback(750);
   
-  // Verificación amigable compatible con iOS y Safari
-  if (!navigator.bluetooth) {
-    alert("Para conectar por Bluetooth en iOS, asegúrate de abrir el enlace directamente en Safari o mediante la PWA instalada, y que el Bluetooth del iPhone esté activado.");
-    return;
-  }
-  
   try {
     document.getElementById('bt-status-txt').innerText = "BUSCANDO...";
     
+    // Lanza directamente el selector Bluetooth nativo de iOS
     bluetoothDevice = await navigator.bluetooth.requestDevice({
       acceptAllDevices: true,
       optionalServices: ['0000ffe0-0000-1000-8000-00805f9b34fb', '0000180f-0000-1000-8000-00805f9b34fb']
@@ -333,6 +328,10 @@ async function connectOBD2() {
   } catch (error) {
     console.log("Error Bluetooth: ", error);
     document.getElementById('bt-status-txt').innerText = "CONECTAR";
+    
+    if (error.name !== 'NotFoundError') {
+      alert("Asegúrate de que el adaptador OBD2 está conectado al puerto del coche, con el contacto dado y el Bluetooth del iPhone encendido.");
+    }
   }
 }
 
